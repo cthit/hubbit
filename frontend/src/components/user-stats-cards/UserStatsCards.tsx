@@ -10,6 +10,7 @@ import {
   formatDate,
   isToday,
   prettyFromSeconds,
+  secondsToMinutesOrHours,
   timeBetween,
   timeSince,
 } from '../../dateUtil';
@@ -34,6 +35,7 @@ export const USER_STATS_FRAGMENT = gql`
       startTime
       endTime
     }
+    timeTodaySeconds
   }
 `;
 
@@ -60,7 +62,7 @@ const UserStatsCards = ({ user }: Props) => {
     <>
       <div className={styles.userStatsCardsWrapper}>
         <UserStatsCard title="Last session" content={getLastSessionText(user.recentSessions)} />
-        <UserStatsCard title="Today" content={getTodayText(user.recentSessions)} />
+        <UserStatsCard title="Today" content={getTodayText(user.timeTodaySeconds)} />
         <UserStatsCard title="Total time" content={prettyFromSeconds(user.totalTimeSeconds)} />
         <UserStatsCard title="Longest session" content={prettyFromSeconds(longestSessionSeconds)} />
       </div>
@@ -146,19 +148,12 @@ function getLastSessionText(recentSessions: UserStatsQuery['user']['recentSessio
   );
 }
 
-function getTodayText(recentSessions: UserStatsQuery['user']['recentSessions']): any {
-  if (recentSessions.length === 0) {
-    return 'Never been in the Hubb! :o';
+function getTodayText(totalSecondsToday: number): any {
+  if (totalSecondsToday <= 0) {
+    return `Not seen today`;
   }
 
-  const lastSession = recentSessions[0];
-  const lastSessionEndTime = new Date(lastSession.endTime);
-
-  if (!isToday(lastSessionEndTime)) {
-    return 'Not seen today';
-  }
-
-  return `For about ${dateDiffToString(timeSince(lastSessionEndTime))}`;
+  return `For about ${secondsToMinutesOrHours(totalSecondsToday)}`;
 }
 
 export default UserStatsCards;

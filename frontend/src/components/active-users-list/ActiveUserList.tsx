@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { gql } from '@urql/core';
 
 import { ActiveUserFragment } from '../../__generated__/graphql';
+import { getHoursDiff } from '../../dateUtil';
 import { formatNick } from '../../util';
 
 import styles from './ActiveUserList.module.scss';
@@ -88,18 +89,6 @@ const ActiveUserList = ({ sessions }: Props) => {
 
 function formatTime(time: Date): string {
   return `Since ${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')} `;
-}
-
-const oneHour = 1000 * 60 * 60;
-const oneMinute = 1000 * 60;
-function getHoursDiff(a: Date, b: Date): string {
-  const diffTime = Math.abs(a.getTime() - b.getTime());
-  const diffHours = Math.floor(diffTime / oneHour);
-  if (diffHours >= 1) {
-    return `(${diffHours} hours)`;
-  }
-
-  return `(${Math.round(diffTime / oneMinute)} minutes)`;
 }
 
 export default ActiveUserList;

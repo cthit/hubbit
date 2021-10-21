@@ -116,6 +116,7 @@ type User {
 	recentSessions: [Session!]!
 	longestSession: Session
 	totalTimeSeconds: Int!
+	timeTodaySeconds: Int!
 	devices: [Device!]!
 }
 input UserUniqueInput {
