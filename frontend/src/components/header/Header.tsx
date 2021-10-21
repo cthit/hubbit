@@ -20,6 +20,17 @@ const Header = () => {
         <a className={styles.title} href="/">
           Who is in the Hubb?
         </a>
+        <div className={styles.debugContainer}>
+          <div className={styles.debugCard}>
+            <p>
+              This is a development version of a rewrite of HubbIT. <br />
+              If you find any issues or have any suggestions please create issues on our{' '}
+              <Link href="https://github.com/cthit/hubbit2">
+                <a>github repository</a>
+              </Link>
+            </p>
+          </div>
+        </div>
       </h1>
       <nav>
         <ul className={styles.menu}>
