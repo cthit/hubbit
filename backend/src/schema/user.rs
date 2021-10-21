@@ -1,5 +1,5 @@
 use async_graphql::{guard::Guard, Context, InputObject, Object, SimpleObject};
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Duration, Local, Utc};
 use log::error;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -197,6 +197,38 @@ impl User {
 
     let duration_ms = sessions.iter().fold(0, |prev, cur| {
       prev + (cur.end_time - cur.start_time).num_milliseconds()
+    });
+
+    Ok(duration_ms / 1000)
+  }
+
+  async fn time_today_seconds(&self, context: &Context<'_>) -> HubbitSchemaResult<i64> {
+    let user_session_repo = context.data_unchecked::<UserSessionRepository>();
+    let today = Local::now().date();
+    let today_start = today.and_hms(0, 0, 0);
+    let today_end = today_start
+      .checked_add_signed(Duration::days(1))
+      .ok_or(HubbitSchemaError::InternalError)?
+      .checked_sub_signed(Duration::seconds(1))
+      .ok_or(HubbitSchemaError::InternalError)?;
+
+    let sessions = user_session_repo
+      .get_range_for_user(today_start, today_end, self.id)
+      .await
+      .map_err(|_| HubbitSchemaError::InternalError)?;
+
+    let duration_ms = sessions.iter().fold(0, |prev, curr| {
+      let start_time = if curr.start_time.date().eq(&today) {
+        DateTime::<Local>::from(curr.start_time)
+      } else {
+        today_start
+      };
+      let end_time = if curr.end_time.date().eq(&today) {
+        DateTime::<Local>::from(curr.end_time)
+      } else {
+        today_end
+      };
+      prev + (end_time - start_time).num_milliseconds()
     });
 
     Ok(duration_ms / 1000)

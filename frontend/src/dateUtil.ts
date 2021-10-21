@@ -82,3 +82,28 @@ export function prettyFromSeconds(seconds: number) {
 
   return pretty;
 }
+
+export function getHoursDiff(a: Date, b: Date): string {
+  const diffTime = Math.abs(a.getTime() - b.getTime());
+  const diffHours = Math.floor(diffTime / (MINUTES_PER_HOUR * SECONDS_PER_MINUTE * ONE_SECOND));
+  if (diffHours >= 1) {
+    return `(${diffHours} hours)`;
+  }
+
+  return `(${Math.round(diffTime / (SECONDS_PER_MINUTE * ONE_SECOND))} minutes)`;
+}
+
+export function secondsToMinutesOrHours(seconds: number) {
+  if (seconds < SECONDS_PER_MINUTE) {
+    return `${seconds} seconds`;
+  }
+
+  const minutes = Math.floor(seconds / SECONDS_PER_MINUTE);
+
+  if (minutes < MINUTES_PER_HOUR) {
+    return `${minutes} minutes`;
+  }
+
+  const hours = Math.floor(minutes / MINUTES_PER_HOUR);
+  return `${hours} hours`;
+}
