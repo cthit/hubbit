@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
 import { gql } from '@urql/core';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -8,8 +8,8 @@ import {
   dateDiffToAgoString,
   dateDiffToString,
   formatDate,
-  isToday,
   prettyFromSeconds,
+  prettyHoursFromSeconds,
   secondsToMinutesOrHours,
   timeBetween,
   timeSince,
@@ -63,7 +63,16 @@ const UserStatsCards = ({ user }: Props) => {
       <div className={styles.userStatsCardsWrapper}>
         <UserStatsCard title="Last session" content={getLastSessionText(user.recentSessions)} />
         <UserStatsCard title="Today" content={getTodayText(user.timeTodaySeconds)} />
-        <UserStatsCard title="Total time" content={prettyFromSeconds(user.totalTimeSeconds)} />
+        <UserStatsCard
+          title="Total time"
+          content={
+            <>
+              {prettyFromSeconds(user.totalTimeSeconds)}
+              <br />
+              {`(${prettyHoursFromSeconds(user.totalTimeSeconds)})`}
+            </>
+          }
+        />
         <UserStatsCard title="Longest session" content={prettyFromSeconds(longestSessionSeconds)} />
       </div>
       <div className={styles.graphContainer}>
@@ -100,7 +109,7 @@ const UserStatsCards = ({ user }: Props) => {
 
 interface UserStatCardProps {
   title: string;
-  content: string;
+  content: string | ReactElement;
 }
 
 const UserStatsCard = ({ title, content }: UserStatCardProps) => (
