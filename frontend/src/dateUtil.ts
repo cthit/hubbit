@@ -64,19 +64,19 @@ export function formatDate(date: Date): string {
 }
 
 export function prettyFromSeconds(seconds: number) {
-  let pretty = `${seconds % 60}s`;
-  if (seconds >= 60) {
-    const minutes = Math.floor(seconds / 60) % 60;
+  let pretty = `${seconds % SECONDS_PER_MINUTE}s`;
+  if (seconds >= SECONDS_PER_MINUTE) {
+    const minutes = Math.floor(seconds / SECONDS_PER_MINUTE) % SECONDS_PER_MINUTE;
     pretty = `${minutes}m ${pretty}`;
   }
 
-  if (seconds >= 60 * 60) {
-    const hours = Math.floor(seconds / 60 / 60) % 24;
+  if (seconds >= SECONDS_PER_MINUTE * MINUTES_PER_HOUR) {
+    const hours = Math.floor(seconds / SECONDS_PER_MINUTE / MINUTES_PER_HOUR) % HOURS_PER_DAY;
     pretty = `${hours}h ${pretty}`;
   }
 
-  if (seconds >= 60 * 60 * 24) {
-    const days = Math.floor(seconds / 60 / 60 / 24);
+  if (seconds >= SECONDS_PER_MINUTE * MINUTES_PER_HOUR * HOURS_PER_DAY) {
+    const days = Math.floor(seconds / SECONDS_PER_MINUTE / MINUTES_PER_HOUR / HOURS_PER_DAY);
     pretty = `${days}d ${pretty}`;
   }
 
@@ -111,4 +111,19 @@ export function secondsToMinutesOrHours(seconds: number) {
 
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);
   return `${hours} hours`;
+}
+
+export function prettyHoursFromSeconds(seconds: number) {
+  let pretty = `${seconds % SECONDS_PER_MINUTE}s`;
+  if (seconds >= SECONDS_PER_MINUTE) {
+    const minutes = Math.floor(seconds / SECONDS_PER_MINUTE) % SECONDS_PER_MINUTE;
+    pretty = `${minutes}m ${pretty}`;
+  }
+
+  if (seconds >= SECONDS_PER_MINUTE * MINUTES_PER_HOUR) {
+    const hours = Math.floor(seconds / SECONDS_PER_MINUTE / MINUTES_PER_HOUR);
+    pretty = `${hours}h ${pretty}`;
+  }
+
+  return pretty;
 }
