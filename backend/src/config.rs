@@ -12,11 +12,12 @@ pub struct Config {
   pub gamma_client_secret: String,
   pub cookie_secret: String,
   pub cookie_secure: bool,
+  pub group_whitelist: Vec<String>,
 }
 
 impl Config {
   pub fn from_env() -> Result<Self, ConfigError> {
-    Ok(Self {
+    let conf = Self {
       port: try_read_var("PORT")?,
       db_url: try_read_var("DATABASE_URL")?,
       redis_url: try_read_var("REDIS_URL")?,
@@ -27,7 +28,19 @@ impl Config {
       gamma_client_secret: try_read_var("GAMMA_CLIENT_SECRET")?,
       cookie_secret: try_read_var("COOKIE_SECRET")?,
       cookie_secure: try_read_var("COOKIE_SECURE")?,
-    })
+      group_whitelist: try_read_var::<String>("GROUP_WHITELIST")
+        .unwrap_or_else(|_| String::new())
+        .split(',')
+        .map(|str| str.trim().to_string())
+        .filter(|str| !str.is_empty())
+        .collect(),
+    };
+
+    if conf.group_whitelist.is_empty() {
+      println!("No group whitelist provided, showing all");
+    }
+
+    Ok(conf)
   }
 }
 
