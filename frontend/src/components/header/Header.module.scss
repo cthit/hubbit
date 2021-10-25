@@ -1,5 +1,28 @@
 @import 'src/global-styles/vars';
 
+.debugCard {
+  border-radius: 5px;
+  box-shadow: 0 4px 10px 0px #AAAAAA;
+  background-color: #e0d000;
+  font-size: 16px;
+  padding: 0 10px;
+
+  p {
+    font-weight: normal;
+
+    a {
+      font-weight: bold;
+    }
+  }
+}
+
+.debugContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .hContainer {
   width: 100%;
   background-color: $primary-color;
