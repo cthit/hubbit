@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 
 import { gql } from '@urql/core';
 
@@ -8,11 +8,11 @@ import {
   dateDiffToString,
   formatDate,
   prettyFromSeconds,
-  prettyHoursFromSeconds,
   secondsToMinutesOrHours,
   timeBetween,
   timeSince,
 } from '../../dateUtil';
+import UserStatsCard from '../UserStatsCard/UserStatsCard';
 
 import styles from './UserStatsCards.module.scss';
 
@@ -26,14 +26,7 @@ export const USER_STATS_FRAGMENT = gql`
       startTime
       endTime
     }
-    hourStats
-    cid
-    nick
     totalTimeSeconds
-    longestSession {
-      startTime
-      endTime
-    }
     timeTodaySeconds
   }
 `;
@@ -60,18 +53,6 @@ const UserStatsCards = ({ user }: Props) => {
     </div>
   );
 };
-
-interface UserStatCardProps {
-  title: string;
-  content: string | ReactElement;
-}
-
-const UserStatsCard = ({ title, content }: UserStatCardProps) => (
-  <div className={styles.infoContainer}>
-    <h2 className={styles.infoHeader}>{title}</h2>
-    <div className={styles.infoText}>{content}</div>
-  </div>
-);
 
 function getLastSessionText(recentSessions: UserStatsQuery['user']['recentSessions']): any {
   if (recentSessions.length === 0) {
