@@ -98,7 +98,7 @@ const UserStatsCards = ({ user }: Props) => {
               <XAxis dataKey="hour" />
               <YAxis domain={[0, Math.ceil((maxHours * 1.2) / 5) * 5]} />
               <Tooltip content={<CustomTooltip />} />
-              <Area type="monotone" dataKey="hours" stroke="#68d157" fill="#68d157" />
+              <Area type="monotone" dataKey="hours" stroke="#389127" fill="#68d157" dot={true} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
