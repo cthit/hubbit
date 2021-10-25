@@ -86,11 +86,16 @@ export function prettyFromSeconds(seconds: number) {
 export function getHoursDiff(a: Date, b: Date): string {
   const diffTime = Math.abs(a.getTime() - b.getTime());
   const diffHours = Math.floor(diffTime / (MINUTES_PER_HOUR * SECONDS_PER_MINUTE * ONE_SECOND));
+
   if (diffHours >= 1) {
-    return `(${diffHours} hours)`;
+    return `(${diffHours} hour${diffHours === 1 ? '' : 's'})`;
   }
 
-  return `(${Math.round(diffTime / (SECONDS_PER_MINUTE * ONE_SECOND))} minutes)`;
+  const minutes = Math.floor(diffTime / (SECONDS_PER_MINUTE * ONE_SECOND));
+  if (minutes < 1) {
+    return 'Just now';
+  }
+  return `(${minutes} minute${minutes === 1 ? '' : 's'})`;
 }
 
 export function secondsToMinutesOrHours(seconds: number) {
