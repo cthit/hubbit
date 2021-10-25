@@ -112,7 +112,7 @@ export const formatNick = (cid: string, nick: string) => {
     case 'jenhallb':
       return `❤ ${nick} ❤`;
     case 'erijohns':
-      return `🍔${nick}🦙`;
+      return `${nick}👁️👄👁️`;
     case 'caeric':
       return `Loppan :dab:`;
     case 'lahtig':
