@@ -206,11 +206,7 @@ impl User {
     let user_session_repo = context.data_unchecked::<UserSessionRepository>();
     let today = Local::now().date();
     let today_start = today.and_hms(0, 0, 0);
-    let today_end = today_start
-      .checked_add_signed(Duration::days(1))
-      .ok_or(HubbitSchemaError::InternalError)?
-      .checked_sub_signed(Duration::seconds(1))
-      .ok_or(HubbitSchemaError::InternalError)?;
+    let today_end = (today_start + Duration::days(1)) - Duration::seconds(1);
 
     let sessions = user_session_repo
       .get_range_for_user(today_start, today_end, self.id)
