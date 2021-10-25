@@ -12,6 +12,7 @@ use crate::{
 };
 
 use super::{device::Device, AuthGuard, HubbitSchemaError, HubbitSchemaResult};
+use crate::config::Config;
 
 #[derive(Default)]
 pub struct UserQuery;
@@ -20,6 +21,12 @@ pub struct UserQuery;
 pub struct UserUniqueInput {
   id: Option<Uuid>,
   cid: Option<String>,
+}
+
+#[derive(PartialEq, SimpleObject)]
+pub struct Group {
+  name: String,
+  pretty_name: String,
 }
 
 #[Object]
@@ -104,8 +111,9 @@ impl User {
     Ok(user.avatar_url)
   }
 
-  async fn groups(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<String>> {
+  async fn groups(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Group>> {
     let user_service = context.data_unchecked::<UserService>();
+    let config = context.data_unchecked::<Config>();
     let user = user_service
       .get_by_id(self.id, false)
       .await
@@ -113,8 +121,15 @@ impl User {
     let mut groups = user
       .groups
       .into_iter()
-      .filter(|group| group.active)
-      .map(|group| group.super_group.name)
+      .filter(|group| {
+        group.active
+          && (config.group_whitelist.is_empty()
+            || config.group_whitelist.contains(&group.super_group.name))
+      })
+      .map(|group| Group {
+        name: group.super_group.name,
+        pretty_name: group.super_group.pretty_name,
+      })
       .collect::<Vec<_>>();
     groups.dedup();
     Ok(groups)

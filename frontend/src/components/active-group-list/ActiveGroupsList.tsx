@@ -12,7 +12,10 @@ export const ACTIVE_GROUP_FRAGMENT = gql`
     user {
       cid
       nick
-      groups
+      groups {
+        name
+        prettyName
+      }
     }
   }
 `;
@@ -21,27 +24,36 @@ interface Props {
   sessions: ActiveGroupFragment[];
 }
 
+interface GroupUsers {
+  prettyName: string;
+  users: ActiveGroupFragment['user'][];
+}
+
 const ActiveGroupList = ({ sessions }: Props) => {
-  const groupsMap = new Map<string, ActiveGroupFragment['user'][]>();
+  const groupsMap = new Map<string, GroupUsers>();
   sessions.forEach(session => {
     session.user.groups.forEach(group => {
-      const users = groupsMap.get(group);
+      const groupUsers = groupsMap.get(group.name);
       const user = {
         ...session.user,
         nick: formatNick(session.user.cid, session.user.nick),
       };
-      if (users) {
-        groupsMap.set(group, [...users, user]);
+      if (groupUsers) {
+        groupsMap.set(group.name, { ...groupUsers, users: [...groupUsers.users, user] });
       } else {
-        groupsMap.set(group, [user]);
+        groupsMap.set(group.name, {
+          prettyName: group.prettyName,
+          users: [user],
+        });
       }
     });
   });
   const groups = Array.from(groupsMap)
-    .map(([group, users]) => {
+    .map(([group, groupUsers]) => {
       return {
         name: group,
-        users: users.sort((left, right) => left.nick.localeCompare(right.nick)),
+        prettyName: groupUsers.prettyName,
+        users: groupUsers.users.sort((left, right) => left.nick.localeCompare(right.nick)),
       };
     })
     .sort((left, right) => left.name.localeCompare(right.name));
@@ -54,7 +66,7 @@ const ActiveGroupList = ({ sessions }: Props) => {
           <table className="data-table card-shadow">
             <tbody>
               <tr className="header-row" id={group.name}>
-                <th>{group.name}</th>
+                <th>{group.prettyName}</th>
               </tr>
               {group.users.map(user => (
                 <tr key={user.cid} className="data-table-row">
