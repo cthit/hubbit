@@ -27,6 +27,7 @@ services:
       COOKIE_SECRET: bdvrJ2cYgPeaj6Tys5475QHoj7Qcenb2
       COOKIE_SECURE: "false"
       RUST_LOG: ${BACKEND_LOG_LEVEL}
+      GROUP_WHITELIST: ${GROUP_WHITELIST}
     ports:
       - ${BACKEND_PORT}:8080
     volumes:

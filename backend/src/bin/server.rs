@@ -60,6 +60,7 @@ async fn main() -> HubbitResult<()> {
     MutationRoot::default(),
     SubscriptionRoot,
   )
+  .data(config.clone())
   .data(device_repo)
   .data(stats_service.clone())
   .data(hour_stats_service)

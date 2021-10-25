@@ -122,4 +122,6 @@ pub struct GammaGroup {
 pub struct GammaSuperGroup {
   pub id: Uuid,
   pub name: String,
+  #[serde(rename = "prettyName")]
+  pub pretty_name: String,
 }

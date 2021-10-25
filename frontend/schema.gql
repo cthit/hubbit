@@ -18,6 +18,10 @@ input DeviceInput {
 	address: String!
 	name: String!
 }
+type Group {
+	name: String!
+	prettyName: String!
+}
 type MutationRoot {
 	setDevices(data: SetDevicesInput!): [Device!]!
 }
@@ -111,7 +115,7 @@ type User {
 	firstName: String!
 	lastName: String!
 	avatarUrl: String!
-	groups: [String!]!
+	groups: [Group!]!
 	hourStats: [Int!]!
 	recentSessions: [Session!]!
 	longestSession: Session
