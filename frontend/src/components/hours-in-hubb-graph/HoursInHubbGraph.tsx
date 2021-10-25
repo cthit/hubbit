@@ -3,21 +3,18 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-import { UserStatsFragment } from '../../__generated__/graphql';
+import { UserHourStatsFragment } from '../../__generated__/graphql';
 
 import styles from './HoursInHubbGraph.module.scss';
 
-export const USER_LAST_SESSIONS_FRAGMENT = gql`
-  fragment UserLastSessions on User {
-    recentSessions {
-      startTime
-      endTime
-    }
+export const USER_HOUR_STATS_FRAGMENT = gql`
+  fragment UserHourStats on User {
+    hourStats
   }
 `;
 
 interface Props {
-  user: UserStatsFragment;
+  user: UserHourStatsFragment;
 }
 
 const HoursInHubbGraph = ({ user }: Props) => {
@@ -30,7 +27,7 @@ const HoursInHubbGraph = ({ user }: Props) => {
 
   return (
     <div className={styles.graphContainer}>
-      <h2 className={styles.graphHeader}>Hour stats</h2>
+      <div className={styles.graphHeader}>Hour stats</div>
       <div className={styles.graphContent}>
         <ResponsiveContainer aspect={2} maxHeight={500}>
           <AreaChart
