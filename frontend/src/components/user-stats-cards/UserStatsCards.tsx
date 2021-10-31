@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { gql } from '@urql/core';
+import dateFormat from 'dateformat';
 
 import { UserStatsFragment, UserStatsQuery } from '../../__generated__/graphql';
 import {
   dateDiffToAgoString,
   dateDiffToString,
-  formatDate,
   prettyFromSeconds,
   secondsToMinutesOrHours,
   timeBetween,
@@ -63,7 +63,7 @@ function getLastSessionText(recentSessions: UserStatsQuery['user']['recentSessio
   const lastSessionStartTime = new Date(lastSession.startTime);
   const lastSessionEndTime = new Date(lastSession.endTime);
   const timeSinceStr = dateDiffToAgoString(timeSince(lastSessionEndTime));
-  const dateStr = formatDate(lastSessionEndTime);
+  const dateStr = dateFormat(lastSessionEndTime, 'd mmm HH:MM');
 
   return (
     <>

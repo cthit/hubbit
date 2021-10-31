@@ -1,5 +1,6 @@
 import React from 'react';
 
+import dateFormat from 'dateformat';
 import gql from 'graphql-tag';
 
 import { UserRecentSessionsFragment } from '../../__generated__/graphql';
@@ -34,10 +35,12 @@ const UserRecentSessionsList = ({ user }: Props) => {
             {user.recentSessions.map((session, index) => {
               const startTime = new Date(session.startTime);
               const endTime = new Date(session.endTime);
+              const fmt = 'dddd d mmmm yyyy';
+
               return (
                 <tr key={index}>
                   <td>
-                    {formatDate(startTime)}
+                    {dateFormat(startTime, fmt)}
                     <br />
                     for about {getHoursDiff(startTime, endTime)}
                   </td>
@@ -50,14 +53,5 @@ const UserRecentSessionsList = ({ user }: Props) => {
     </div>
   );
 };
-
-export function formatDate(startTime: Date): string {
-  return `${startTime.toLocaleDateString('default', {
-    weekday: 'long',
-  })} ${startTime.getDate()}
-   ${startTime.toLocaleDateString('default', {
-     month: 'long',
-   })} ${startTime.getFullYear()}`;
-}
 
 export default UserRecentSessionsList;
