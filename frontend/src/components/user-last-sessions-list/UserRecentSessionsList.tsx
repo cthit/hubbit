@@ -22,6 +22,8 @@ interface Props {
 }
 
 const UserRecentSessionsList = ({ user }: Props) => {
+  const year = new Date().getFullYear();
+
   return (
     <div className={styles.recentSessionsContainer}>
       <div className={styles.recentSessionsInnerContainer}>
@@ -35,7 +37,7 @@ const UserRecentSessionsList = ({ user }: Props) => {
             {user.recentSessions.map((session, index) => {
               const startTime = new Date(session.startTime);
               const endTime = new Date(session.endTime);
-              const fmt = 'dddd d mmmm yyyy';
+              const fmt = startTime.getFullYear() == year ? 'dddd d mmmm HH:MM' : 'dddd d mmmm HH:MM yyyy';
 
               return (
                 <tr key={index}>
