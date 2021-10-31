@@ -58,7 +58,7 @@ export function isToday(date: Date): boolean {
 }
 
 export function formatDate(date: Date): string {
-  return `${date.getDay()} ${date.toLocaleString('default', {
+  return `${date.getDate()} ${date.toLocaleString('default', {
     month: 'short',
   })} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 }
