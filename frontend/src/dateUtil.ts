@@ -57,12 +57,6 @@ export function isToday(date: Date): boolean {
   );
 }
 
-export function formatDate(date: Date): string {
-  return `${date.getDate()} ${date.toLocaleString('default', {
-    month: 'short',
-  })} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-}
-
 export function prettyFromSeconds(seconds: number) {
   let pretty = `${seconds % SECONDS_PER_MINUTE}s`;
   if (seconds >= SECONDS_PER_MINUTE) {
