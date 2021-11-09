@@ -48,71 +48,75 @@ const DeviceList = ({ initialDevices }: Props) => {
 
   return (
     <div className={styles.macAddressesWrapper}>
-      <table className="data-table card-shadow">
-        <thead>
-          <tr className="header-row">
-            <th>Active</th>
-            <th>MAC-Address</th>
-            <th>Device Description</th>
-            <th>Changed</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {devices.map((device, index) => (
-            <tr key={index}>
-              <td className={styles.statusColumn}>
-                <div
-                  className={styles.statusIndicator + ` ${device.isActive ? styles.activeInHub : styles.inactiveInHub}`}
-                />
-              </td>
-              <td>
-                <input
-                  className={styles.macTextField}
-                  value={device.address}
-                  onChange={e => {
-                    // 16 hexadecimal chars + 7 dividing chars = 23
-                    const val = e.target.value.substring(0, 23);
-                    const newDevice = device;
-                    newDevice.address = val;
-                    newDevice.unsavedChanges = hasUnsavedChanges(newDevice);
-                    setDevices(newDevice => [...newDevice]);
-                  }}
-                />
-              </td>
-              <td>
-                <input
-                  className={styles.macTextField}
-                  value={device.description}
-                  onChange={e => {
-                    const val = e.target.value.substring(0, 40);
-                    const newDevice = device;
-                    newDevice.description = val;
-                    newDevice.unsavedChanges = hasUnsavedChanges(newDevice);
-                    setDevices(newDevice => [...newDevice]);
-                  }}
-                />
-              </td>
-              <td className={styles.changedCell}>{device.unsavedChanges ? '*' : ' '}</td>
-              <td>
-                <button
-                  className={styles.iconButton}
-                  onClick={() => {
-                    if (window.confirm('Do you really want to delete this device?')) {
-                      setDevices(devices => devices.filter((_device, i) => i !== index));
-                    }
-                  }}
-                >
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </button>
-              </td>
+      <div className={styles.horizontalScrollArea}>
+        <table className="data-table card-shadow">
+          <thead>
+            <tr className="header-row">
+              <th>Active</th>
+              <th>MAC-Address</th>
+              <th>Device Description</th>
+              <th>Changed</th>
+              <th />
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {devices.map((device, index) => (
+              <tr key={index}>
+                <td className={styles.statusColumn}>
+                  <div
+                    className={
+                      styles.statusIndicator + ` ${device.isActive ? styles.activeInHub : styles.inactiveInHub}`
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    className={styles.macTextField}
+                    value={device.address}
+                    onChange={e => {
+                      // 16 hexadecimal chars + 7 dividing chars = 23
+                      const val = e.target.value.substring(0, 23);
+                      const newDevice = device;
+                      newDevice.address = val;
+                      newDevice.unsavedChanges = hasUnsavedChanges(newDevice);
+                      setDevices(newDevice => [...newDevice]);
+                    }}
+                  />
+                </td>
+                <td>
+                  <input
+                    className={styles.macTextField}
+                    value={device.description}
+                    onChange={e => {
+                      const val = e.target.value.substring(0, 40);
+                      const newDevice = device;
+                      newDevice.description = val;
+                      newDevice.unsavedChanges = hasUnsavedChanges(newDevice);
+                      setDevices(newDevice => [...newDevice]);
+                    }}
+                  />
+                </td>
+                <td className={styles.changedCell}>{device.unsavedChanges ? '*' : ' '}</td>
+                <td>
+                  <button
+                    className={styles.iconButton}
+                    onClick={() => {
+                      if (window.confirm('Do you really want to delete this device?')) {
+                        setDevices(devices => devices.filter((_device, i) => i !== index));
+                      }
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className={styles.helpText}>
-        Don&apos;t know how to find your <a href={'https://en.wikipedia.org/wiki/MAC_address'}>MAC Address</a>? Take a
-        look at <a href={'https://www.wikihow.com/Find-the-MAC-Address-of-Your-Computer'}>this guide</a>!
+        Don&apos;t know how to find your <a href={'https://en.wikipedia.org/wiki/MAC_address'}>MAC Address</a>? <br />
+        Take a look at <a href={'https://www.wikihow.com/Find-the-MAC-Address-of-Your-Computer'}>this guide</a>!
       </div>
       <button
         className={styles.saveButton}
