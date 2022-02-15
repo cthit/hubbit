@@ -51,7 +51,7 @@ const Header = () => {
           </li>
           <li className={pathname.startsWith(MY_STATS_BASE_ENDPOINT) ? styles.active : ''}>
             <Link href={USER_STATS_ME_ENDPOINT}>
-              <a>MY STATS</a>
+              <a>USER STATS</a>
             </Link>
           </li>
         </ul>
