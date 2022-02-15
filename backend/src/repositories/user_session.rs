@@ -62,6 +62,24 @@ ORDER BY start_time DESC
     )
   }
 
+  pub async fn get_first_entry_day(&self, user_id: Uuid) -> HubbitResult<Option<UserSession>> {
+    Ok(
+      sqlx::query_as!(
+        UserSession,
+        "
+SELECT * 
+FROM user_sessions 
+WHERE user_id = $1 
+ORDER BY start_time
+LIMIT 1;
+      ",
+        user_id
+      )
+      .fetch_optional(&self.pool)
+      .await?,
+    )
+  }
+
   pub async fn get_active(&self) -> HubbitResult<Vec<UserSession>> {
     Ok(
       sqlx::query_as!(

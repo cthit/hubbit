@@ -120,6 +120,7 @@ type User {
 	recentSessions: [Session!]!
 	longestSession: Session
 	totalTimeSeconds: Int!
+	averageTimePerDay: Int!
 	timeTodaySeconds: Int!
 	devices: [Device!]!
 }
