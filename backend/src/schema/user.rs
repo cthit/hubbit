@@ -202,6 +202,34 @@ impl User {
     Ok(duration_ms / 1000)
   }
 
+  async fn average_time_per_day(&self, context: &Context<'_>) -> HubbitSchemaResult<i64> {
+    let user_session_repo = context.data_unchecked::<UserSessionRepository>();
+    let sessions = user_session_repo
+      .get_range_for_user(*MIN_DATETIME, *MAX_DATETIME, self.id)
+      .await
+      .map_err(|_| HubbitSchemaError::InternalError)?;
+
+    let duration_ms = sessions.iter().fold(0, |prev, cur| {
+      prev + (cur.end_time - cur.start_time).num_milliseconds()
+    });
+
+    let all_time_seconds = duration_ms / 1000;
+    let first_day = user_session_repo
+      .get_first_entry_day(self.id)
+      .await
+      .map_err(|_| HubbitSchemaError::InternalError)?
+      .ok_or(HubbitSchemaError::InternalError)?;
+
+    let today = Local::now();
+    let num_days_since_first = today.signed_duration_since(first_day.start_time).num_days();
+
+    Ok(
+      all_time_seconds
+        .checked_div(num_days_since_first)
+        .unwrap_or(0),
+    )
+  }
+
   async fn time_today_seconds(&self, context: &Context<'_>) -> HubbitSchemaResult<i64> {
     let user_session_repo = context.data_unchecked::<UserSessionRepository>();
     let today = Local::now().date();

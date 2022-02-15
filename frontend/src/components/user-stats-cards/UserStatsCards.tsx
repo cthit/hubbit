@@ -26,6 +26,7 @@ export const USER_STATS_FRAGMENT = gql`
       startTime
       endTime
     }
+    averageTimePerDay
     totalTimeSeconds
     timeTodaySeconds
   }
@@ -48,6 +49,7 @@ const UserStatsCards = ({ user }: Props) => {
     <div className={styles.userStatsCardsWrapper}>
       <UserStatsCard title="Last session" content={getLastSessionText(user.recentSessions)} />
       <UserStatsCard title="Today" content={getTodayText(user.timeTodaySeconds)} />
+      <UserStatsCard title="Average time per day" content={prettyFromSeconds(user.averageTimePerDay)} />
       <UserStatsCard title="Total time" content={prettyFromSeconds(user.totalTimeSeconds)} />
       <UserStatsCard title="Longest session" content={prettyFromSeconds(longestSessionSeconds)} />
     </div>
