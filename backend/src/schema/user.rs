@@ -13,6 +13,8 @@ use crate::{
 
 use super::{device::Device, AuthGuard, HubbitSchemaError, HubbitSchemaResult};
 use crate::config::Config;
+use crate::repositories::study_year::StudyYearRepository;
+use crate::services::stats::{Stat, StatsService};
 
 #[derive(Default)]
 pub struct UserQuery;
@@ -277,6 +279,64 @@ impl User {
         .map(|device| Device { id: device.id })
         .collect(),
     )
+  }
+
+  pub async fn curr_alltime_position(
+    &self,
+    context: &Context<'_>,
+  ) -> HubbitSchemaResult<Option<i64>> {
+    let stats_service = context.data_unchecked::<StatsService>();
+    let stats = stats_service.get_alltime().await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
+
+    let mut sort_stats = stats.into_iter().map(|s| s.1).collect::<Vec<Stat>>();
+
+    sort_stats.sort_by_key(|s| -s.duration_ms);
+
+    for (index, stat) in sort_stats.into_iter().enumerate() {
+      if stat.user_id == self.id {
+        return Ok(Some((index + 1) as i64));
+      }
+    }
+
+    Ok(None)
+  }
+
+  pub async fn curr_study_year_position(
+    &self,
+    context: &Context<'_>,
+  ) -> HubbitSchemaResult<Option<i64>> {
+    let study_year_repo = context.data_unchecked::<StudyYearRepository>();
+    let curr_year = study_year_repo
+      .get_current()
+      .await
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?
+      .year;
+
+    let stats_service = context.data_unchecked::<StatsService>();
+    let stats = match stats_service.get_study_year(curr_year).await {
+      Ok(s) => s,
+      Err(e) => {
+        error!("[Schema error] {:?}", e);
+        return Err(HubbitSchemaError::InternalError);
+      }
+    };
+
+    let mut sort_stats = stats.into_iter().map(|s| s.1).collect::<Vec<Stat>>();
+    sort_stats.sort_by_key(|s| -s.duration_ms);
+
+    for (index, stat) in sort_stats.into_iter().enumerate() {
+      if stat.user_id == self.id {
+        return Ok(Some((index + 1) as i64));
+      }
+    }
+
+    Ok(None)
   }
 }
 
