@@ -123,6 +123,8 @@ type User {
 	averageTimePerDay: Int!
 	timeTodaySeconds: Int!
 	devices: [Device!]!
+	currAlltimePosition: Int
+	currStudyYearPosition: Int
 }
 input UserUniqueInput {
 	id: UUID
