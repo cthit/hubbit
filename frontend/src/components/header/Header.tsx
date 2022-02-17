@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import styles from './Header.module.scss';
 
 const MAIN_ENDPOINT = '/';
-const ME_ENDPOINT = '/me';
+const DEVICES_ENDPOINT = '/devices';
 const STATS_BASE_ENDPOINT = '/stats/';
 const MY_STATS_BASE_ENDPOINT = '/users/';
 const USER_STATS_ME_ENDPOINT = '/users/me';
@@ -23,9 +23,9 @@ const Header = () => {
       </h1>
       <nav>
         <ul className={styles.menu}>
-          <li className={pathname === ME_ENDPOINT ? styles.active : ''}>
-            <Link href={ME_ENDPOINT}>
-              <a>ME</a>
+          <li className={pathname === DEVICES_ENDPOINT ? styles.active : ''}>
+            <Link href={DEVICES_ENDPOINT}>
+              <a>DEVICES</a>
             </Link>
           </li>
           <li className={pathname === MAIN_ENDPOINT ? styles.active : ''}>
