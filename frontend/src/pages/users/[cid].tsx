@@ -36,14 +36,6 @@ const USER_STATS_QUERY = gql`
   ${USER_RECENT_SESSIONS_FRAGMENT}
 `;
 
-const ME_CID_QUERY = gql`
-  query MeCidQuery {
-    me {
-      cid
-    }
-  }
-`;
-
 const UserStats: NextPage<PageProps<UserStatsQuery>> = ({ data }) => {
   if (!data) {
     return <Error />;
@@ -88,18 +80,5 @@ export const getServerSideProps = defaultGetServerSideProps<UserStatsQuery, User
         cid,
       },
     };
-  },
-  async (params, client) => {
-    if (params.cid === 'me') {
-      const { data } = await client.query<MeCidQueryQuery>(ME_CID_QUERY).toPromise();
-      if (data) {
-        return {
-          destination: `/users/${data.me.cid}`,
-          permanent: false,
-        };
-      }
-    }
-
-    return;
   },
 );
