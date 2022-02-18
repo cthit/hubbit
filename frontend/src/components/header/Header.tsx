@@ -3,6 +3,8 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { useAuth } from '../../contexts/auth';
+
 import styles from './Header.module.scss';
 
 const MAIN_ENDPOINT = '/';
@@ -13,6 +15,7 @@ const USER_STATS_ME_ENDPOINT = '/users/me';
 
 const Header = () => {
   const { pathname } = useRouter();
+  const { user } = useAuth();
 
   return (
     <header className={styles.hContainer}>
@@ -38,9 +41,9 @@ const Header = () => {
               <a>STATS</a>
             </Link>
           </li>
-          <li className={pathname.startsWith(MY_STATS_BASE_ENDPOINT) ? styles.active : ''}>
+          <li className={pathname === `${MY_STATS_BASE_ENDPOINT}/${user.cid}` ? styles.active : ''}>
             <Link href={USER_STATS_ME_ENDPOINT}>
-              <a>USER STATS</a>
+              <a>MY STATS</a>
             </Link>
           </li>
         </ul>
