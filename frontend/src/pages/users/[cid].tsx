@@ -5,7 +5,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { MeCidQueryQuery, UserStatsQuery, UserStatsQueryVariables } from '../../__generated__/graphql';
+import { UserStatsQuery, UserStatsQueryVariables } from '../../__generated__/graphql';
 import Error from '../../components/error/Error';
 import HoursInHubbGraph, { USER_HOUR_STATS_FRAGMENT } from '../../components/hours-in-hubb-graph/HoursInHubbGraph';
 import UserRecentSessionsList, {
@@ -34,14 +34,6 @@ const USER_STATS_QUERY = gql`
   ${USER_STATS_FRAGMENT}
   ${USER_HOUR_STATS_FRAGMENT}
   ${USER_RECENT_SESSIONS_FRAGMENT}
-`;
-
-const ME_CID_QUERY = gql`
-  query MeCidQuery {
-    me {
-      cid
-    }
-  }
 `;
 
 const UserStats: NextPage<PageProps<UserStatsQuery>> = ({ data }) => {
@@ -88,18 +80,5 @@ export const getServerSideProps = defaultGetServerSideProps<UserStatsQuery, User
         cid,
       },
     };
-  },
-  async (params, client) => {
-    if (params.cid === 'me') {
-      const { data } = await client.query<MeCidQueryQuery>(ME_CID_QUERY).toPromise();
-      if (data) {
-        return {
-          destination: `/users/${data.me.cid}`,
-          permanent: false,
-        };
-      }
-    }
-
-    return;
   },
 );

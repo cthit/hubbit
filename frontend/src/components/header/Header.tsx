@@ -11,11 +11,12 @@ const MAIN_ENDPOINT = '/';
 const DEVICES_ENDPOINT = '/devices';
 const STATS_BASE_ENDPOINT = '/stats/';
 const MY_STATS_BASE_ENDPOINT = '/users/';
-const USER_STATS_ME_ENDPOINT = '/users/me';
 
 const Header = () => {
-  const { pathname } = useRouter();
+  const { asPath } = useRouter();
   const { user } = useAuth();
+
+  const MY_STATS_URL = `${MY_STATS_BASE_ENDPOINT}${user.cid}`;
 
   return (
     <header className={styles.hContainer}>
@@ -26,23 +27,23 @@ const Header = () => {
       </h1>
       <nav>
         <ul className={styles.menu}>
-          <li className={pathname === DEVICES_ENDPOINT ? styles.active : ''}>
+          <li className={asPath === DEVICES_ENDPOINT ? styles.active : ''}>
             <Link href={DEVICES_ENDPOINT}>
               <a>DEVICES</a>
             </Link>
           </li>
-          <li className={pathname === MAIN_ENDPOINT ? styles.active : ''}>
+          <li className={asPath === MAIN_ENDPOINT ? styles.active : ''}>
             <Link href={MAIN_ENDPOINT}>
               <a>SMURFS IN THE HUBB</a>
             </Link>
           </li>
-          <li className={pathname.startsWith(STATS_BASE_ENDPOINT) ? styles.active : ''}>
+          <li className={asPath.startsWith(STATS_BASE_ENDPOINT) ? styles.active : ''}>
             <Link href={`${STATS_BASE_ENDPOINT}study-year`}>
               <a>STATS</a>
             </Link>
           </li>
-          <li className={pathname === `${MY_STATS_BASE_ENDPOINT}/${user.cid}` ? styles.active : ''}>
-            <Link href={USER_STATS_ME_ENDPOINT}>
+          <li className={asPath.startsWith(MY_STATS_URL) ? styles.active : ''}>
+            <Link href={MY_STATS_URL}>
               <a>MY STATS</a>
             </Link>
           </li>
