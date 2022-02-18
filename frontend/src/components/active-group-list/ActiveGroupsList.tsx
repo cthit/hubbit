@@ -66,7 +66,7 @@ const ActiveGroupList = ({ sessions }: Props) => {
           <table className="data-table card-shadow">
             <tbody>
               <tr className="header-row" id={group.name}>
-                <th>{group.prettyName}</th>
+                <th>{group.name == 'hookit' ? '⚔️WANTED🍺' : group.prettyName}</th>
               </tr>
               {group.users.map(user => (
                 <tr key={user.cid} className="data-table-row">
