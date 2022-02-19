@@ -33,6 +33,9 @@ services:
     volumes:
       - ./backend:/app
       - /app/target
+    depends_on:
+      - "hubbit-db"
+    command: ["./wait-for-postgres.sh", "hubbit-db", "${PG_PASSWORD}", "${PG_USERNAME}", "sh", "-c", "cargo sqlx migrate run && cargo watch -x run"]
 
   hubbit-db:
     image: postgres:13.2
