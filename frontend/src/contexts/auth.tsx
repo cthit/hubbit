@@ -24,13 +24,19 @@ const AuthContext = createContext<State>({
 export const AuthProvider = ({ children }: React.PropsWithChildren<any>) => {
   const [{ data, error }] = useAuthUserQuery();
 
-  if (!data) {
-    return null;
-  }
-
   if (error) {
     console.log('Error retrieving auth context', error);
-    return <Error />;
+    return (
+      <div className="center">
+        <div className="card">
+          <b>Failed to communicate with server</b>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return null;
   }
 
   return (
