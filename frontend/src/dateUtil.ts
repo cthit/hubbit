@@ -58,17 +58,23 @@ export function isToday(date: Date): boolean {
 }
 
 export function prettyFromSeconds(seconds: number) {
+  seconds = Math.floor(seconds);
+
   let pretty = `${seconds % SECONDS_PER_MINUTE}s`;
+
+  // Minutes
   if (seconds >= SECONDS_PER_MINUTE) {
     const minutes = Math.floor(seconds / SECONDS_PER_MINUTE) % SECONDS_PER_MINUTE;
     pretty = `${minutes}m ${pretty}`;
   }
 
+  // Hours
   if (seconds >= SECONDS_PER_MINUTE * MINUTES_PER_HOUR) {
     const hours = Math.floor(seconds / SECONDS_PER_MINUTE / MINUTES_PER_HOUR) % HOURS_PER_DAY;
     pretty = `${hours}h ${pretty}`;
   }
 
+  // Days
   if (seconds >= SECONDS_PER_MINUTE * MINUTES_PER_HOUR * HOURS_PER_DAY) {
     const days = Math.floor(seconds / SECONDS_PER_MINUTE / MINUTES_PER_HOUR / HOURS_PER_DAY);
     pretty = `${days}d ${pretty}`;
