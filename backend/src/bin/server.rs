@@ -116,32 +116,39 @@ async fn track_sessions(user_session_repo: UserSessionRepository) -> HubbitResul
 
   loop {
     tokio::time::delay_for(std::time::Duration::from_secs(5)).await;
-    if let Ok(new_present_users) = get_active_users(&user_session_repo).await {
-      let mut new_users = Vec::new();
-      let mut absent_users = Vec::new();
-      for present_user in present_users.iter() {
-        if !new_present_users.contains(present_user) {
-          absent_users.push(*present_user);
+    // if let Ok(new_present_users) =
+    match get_active_users(&user_session_repo).await {
+      Ok(new_present_users) => {
+        let mut new_users = Vec::new();
+        let mut absent_users = Vec::new();
+        for present_user in present_users.iter() {
+          if !new_present_users.contains(present_user) {
+            absent_users.push(*present_user);
+          }
+        }
+
+        for new_present_user in new_present_users {
+          if !present_users.contains(&new_present_user) {
+            new_users.push(new_present_user);
+          }
+        }
+
+        for new_user in new_users {
+          present_users.insert(new_user);
+          SimpleBroker::publish(UserEvent::Join(new_user));
+        }
+
+        for absent_user in absent_users {
+          present_users.remove(&absent_user);
+          SimpleBroker::publish(UserEvent::Leave(absent_user));
         }
       }
-
-      for new_present_user in new_present_users {
-        if !present_users.contains(&new_present_user) {
-          new_users.push(new_present_user);
-        }
+      Err(err) => {
+        error!(
+          "[Session tracker] Could not get active users, err {:?}",
+          err
+        );
       }
-
-      for new_user in new_users {
-        present_users.insert(new_user);
-        SimpleBroker::publish(UserEvent::Join(new_user));
-      }
-
-      for absent_user in absent_users {
-        present_users.remove(&absent_user);
-        SimpleBroker::publish(UserEvent::Leave(absent_user));
-      }
-    } else {
-      error!("[Session tracker] Could not get active users");
     }
   }
 }
