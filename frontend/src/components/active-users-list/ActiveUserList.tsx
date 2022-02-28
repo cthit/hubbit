@@ -69,7 +69,7 @@ const ActiveUserList = ({ sessions }: Props) => {
               const startTime = new Date(session.startTime);
 
               return (
-                <tr key={session.user.cid} className="data-table-row">
+                <tr key={session.user.cid} id={session.user.cid} className="data-table-row">
                   <td className={styles.userRow}>
                     <a href={`/users/${session.user.cid}`}>{formatNick(session.user.cid, session.user.nick)}</a>
                   </td>

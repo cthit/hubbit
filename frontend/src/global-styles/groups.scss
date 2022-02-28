@@ -8,6 +8,21 @@ tr#hookit {
   }
 }
 
+tr#engsmyre {
+  background-image: url('/group-images/gib_cat.jpg');
+  background-repeat: no-repeat;
+  color: white;
+  background-size: 100% 100%;
+
+  td {
+    background-color: rgba(0, 0, 0, 0.3);
+
+    a {
+      color: white;
+    }
+  }
+}
+
 tr#fikit {
   background: url('/group-images/fikit.png');
 
@@ -103,5 +118,15 @@ tr#talperson {
   th {
     color: white;
     text-align: right
+  }
+}
+
+tr#\38 bit {
+  background: url('/group-images/8bit.png');
+
+  th {
+    color: white;
+    font-family: "Silkscreen";
+    font-size: 1em;
   }
 }
