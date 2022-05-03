@@ -8,6 +8,21 @@ tr#hookit {
   }
 }
 
+tr#felixbj {
+  background-image: url('/group-images/sonic-run.gif');
+  background-repeat: no-repeat;
+  color: white;
+  background-size: 100% 100%;
+
+  td {
+    background-color: rgba(0, 0, 0, 0.4);
+
+    a {
+      color: white;
+    }
+  }
+}
+
 tr#engsmyre {
   background-image: url('/group-images/gib_cat.jpg');
   background-repeat: no-repeat;
