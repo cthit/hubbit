@@ -36,6 +36,6 @@ pub async fn redis_mget<T: DeserializeOwned>(
           None => Ok(None),
         }
       })
-      .collect::<HubbitResult<Vec<Option<T>>>>()?,
+      .collect::<HubbitResult<Vec<Option<T>>>>(),
   )
 }
