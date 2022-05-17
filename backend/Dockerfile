@@ -1,7 +1,7 @@
 ##################
 ### BASE STAGE ###
 ##################
-FROM rust:1.54 as base
+FROM rust:1.60 as base
 
 ENV TZ=Europe/Stockholm
 ENV DEBIAN_FRONTEND=noninteractive
@@ -10,7 +10,8 @@ RUN apt update && apt install -y tzdata
 WORKDIR /app
 
 # Install required tools
-RUN cargo install strip_cargo_version sqlx-cli
+RUN cargo install sqlx-cli --version 0.5.13
+RUN cargo install strip_cargo_version
 
 # Install build-target for static linking
 RUN rustup target add x86_64-unknown-linux-musl
