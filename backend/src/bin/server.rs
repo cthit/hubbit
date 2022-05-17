@@ -1,7 +1,12 @@
 use std::collections::HashSet;
 
-use actix_session::CookieSession;
-use actix_web::{middleware, web, App, HttpServer};
+use actix_session::{storage::CookieSessionStore, SessionMiddleware};
+use actix_web::{
+  cookie::{Key, SameSite},
+  middleware,
+  web::{self, Data},
+  App, HttpServer,
+};
 use chrono::{Datelike, Duration, Local};
 use dotenv::dotenv;
 use log::{error, info, warn};
@@ -24,7 +29,7 @@ use backend::{
   services::{hour_stats::HourStatsService, stats::StatsService, user::UserService},
 };
 
-#[actix_web::main]
+#[tokio::main]
 async fn main() -> HubbitResult<()> {
   dotenv().ok();
   env_logger::init();
@@ -79,22 +84,31 @@ async fn main() -> HubbitResult<()> {
   });
 
   let config_clone = config.clone();
-  let port = config.port.clone();
-  let cookie_secret = config.cookie_secret.clone();
+  let port = config.port;
+  let cookie_secret = config.cookie_secret.as_bytes();
   let cookie_secure = config.cookie_secure;
-  if cookie_secret.as_bytes().len() != 32 {
-    panic!("Cookie secret must be exactly 32 bytes");
+  if cookie_secret.len() < 64 {
+    panic!("Cookie secret must be at least 64 bytes");
   }
+
+  let cookie_secret = Key::from(cookie_secret);
 
   Ok(
     HttpServer::new(move || {
       App::new()
         .wrap(middleware::Logger::default())
-        .wrap(CookieSession::private(cookie_secret.as_bytes()).secure(cookie_secure))
-        .data(config_clone.clone())
-        .data(db_pool.clone())
-        .data(redis_pool.clone())
-        .data(schema.clone())
+        .wrap(
+          // CookieSession::private(cookie_secret.as_bytes()).secure(cookie_secure)
+          SessionMiddleware::builder(CookieSessionStore::default(), cookie_secret.clone())
+            .cookie_http_only(true)
+            .cookie_same_site(SameSite::Strict)
+            .cookie_secure(cookie_secure)
+            .build(),
+        )
+        .app_data(Data::new(config_clone.clone()))
+        .app_data(Data::new(db_pool.clone()))
+        .app_data(Data::new(redis_pool.clone()))
+        .app_data(Data::new(schema.clone()))
         .service(web::scope("/api").configure(handlers::init))
     })
     .bind(format!("0.0.0.0:{}", port))?
@@ -109,13 +123,13 @@ async fn track_sessions(user_session_repo: UserSessionRepository) -> HubbitResul
       Ok(present_users) => break present_users,
       _ => {
         warn!("[Session tracker] Could not get initial active users, retrying in 5 seconds...");
-        tokio::time::delay_for(std::time::Duration::from_secs(5)).await
+        tokio::time::sleep(std::time::Duration::from_secs(5)).await
       }
     }
   };
 
   loop {
-    tokio::time::delay_for(std::time::Duration::from_secs(5)).await;
+    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
     // if let Ok(new_present_users) =
     match get_active_users(&user_session_repo).await {
       Ok(new_present_users) => {

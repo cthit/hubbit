@@ -1,4 +1,4 @@
-use mobc_redis::AsyncCommands;
+use mobc_redis::redis::AsyncCommands;
 use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{error::HubbitResult, RedisPool};

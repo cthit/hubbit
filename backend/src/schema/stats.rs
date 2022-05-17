@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use async_graphql::{guard::Guard, Context, InputObject, Object, SimpleObject};
+use async_graphql::{Context, InputObject, Object, SimpleObject};
 use chrono::{Datelike, Duration, TimeZone, Utc, Weekday};
 use log::error;
 use serde::{Deserialize, Serialize};
@@ -119,7 +119,7 @@ pub struct StatsQuery;
 
 #[Object]
 impl StatsQuery {
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn stats_alltime(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Stat>> {
     let stats_service = context.data_unchecked::<StatsService>();
     let stats = stats_service.get_alltime().await.map_err(|e| {
@@ -132,7 +132,7 @@ impl StatsQuery {
     Ok(sort_and_map_stats(stats, &None))
   }
 
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn stats_study_year(
     &self,
     context: &Context<'_>,
@@ -184,7 +184,7 @@ impl StatsQuery {
     Ok(StatsStudyYearPayload { stats, year })
   }
 
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn stats_study_period(
     &self,
     context: &Context<'_>,
@@ -248,7 +248,7 @@ impl StatsQuery {
     })
   }
 
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn stats_month(
     &self,
     context: &Context<'_>,
@@ -306,7 +306,7 @@ impl StatsQuery {
     })
   }
 
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn stats_week(
     &self,
     context: &Context<'_>,
@@ -358,7 +358,7 @@ impl StatsQuery {
     })
   }
 
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn stats_day(
     &self,
     context: &Context<'_>,

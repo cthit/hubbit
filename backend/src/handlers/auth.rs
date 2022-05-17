@@ -26,7 +26,7 @@ async fn gamma_init_flow(
     {
       let url = query.from.clone().unwrap_or_else(|| "/".to_string());
       return HttpResponse::TemporaryRedirect()
-        .header("Location", url)
+        .append_header(("Location", url))
         .finish();
     }
   };
@@ -36,7 +36,7 @@ async fn gamma_init_flow(
     .take(32)
     .map(char::from)
     .collect();
-  match session.set("gamma_state", &state) {
+  match session.insert("gamma_state", &state) {
     Ok(_) => {}
     Err(_) => {
       error!("[Gamma auth] Could not set gamma_state key in cookie");
@@ -45,7 +45,7 @@ async fn gamma_init_flow(
   }
 
   match &query.from {
-    Some(from) => match session.set("gamma_from", from) {
+    Some(from) => match session.insert("gamma_from", from) {
       Ok(_) => {}
       Err(_) => {
         error!("[Gamma auth] Could not set gamma_from key in cookie");
@@ -62,7 +62,7 @@ async fn gamma_init_flow(
     config.gamma_public_url, config.gamma_client_id, state
   );
   HttpResponse::TemporaryRedirect()
-    .header("Location", url)
+    .append_header(("Location", url))
     .finish()
 }
 
@@ -98,7 +98,7 @@ async fn gamma_callback(
     }
   };
 
-  match session.set("gamma_access_token", token_response.access_token) {
+  match session.insert("gamma_access_token", token_response.access_token) {
     Ok(_) => {}
     Err(_) => {
       error!("[Gamma auth] Could not set gamma_acess_token key in cookie");
@@ -115,7 +115,7 @@ async fn gamma_callback(
   session.remove("gamma_state");
 
   HttpResponse::TemporaryRedirect()
-    .header("Location", from)
+    .append_header(("Location", from))
     .finish()
 }
 

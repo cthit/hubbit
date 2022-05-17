@@ -18,6 +18,7 @@ services:
     image: hubbit-backend
     restart: unless-stopped
     environment:
+      PORT: 8080
       DATABASE_URL: postgres://hubbit:hubbit@hubbit-db/hubbit
       REDIS_URL: redis://hubbit-redis:6379
       GAMMA_PUBLIC_URL: http://localhost:8081
@@ -25,7 +26,7 @@ services:
       GAMMA_API_KEY: hubbit
       GAMMA_CLIENT_ID: hubbit
       GAMMA_CLIENT_SECRET: hubbit
-      COOKIE_SECRET: bdvrJ2cYgPeaj6Tys5475QHoj7Qcenb2
+      COOKIE_SECRET: QkAbEaSuT5UNDthgnScWhQwET7HzHUzFPhrS62xwYUwvtbx2ihmQanSSML2Ky63r
       COOKIE_SECURE: "true"
       RUST_LOG: warn
     ports:

@@ -1,4 +1,4 @@
-use async_graphql::{guard::Guard, Context, InputObject, Object};
+use async_graphql::{Context, InputObject, Object};
 use log::error;
 use uuid::Uuid;
 
@@ -63,7 +63,7 @@ pub struct DeviceMutation;
 
 #[Object]
 impl DeviceMutation {
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn set_devices(
     &self,
     context: &Context<'_>,
