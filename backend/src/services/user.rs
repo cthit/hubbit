@@ -74,7 +74,7 @@ impl UserService {
     }
 
     // If in neither local cache or redis, fetch the user
-    Ok(self.fetch_and_store_user(id.to_string()).await?)
+    self.fetch_and_store_user(id.to_string()).await
   }
 
   pub async fn get_by_cid(&self, cid: String) -> HubbitResult<GammaUser> {

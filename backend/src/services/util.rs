@@ -27,15 +27,13 @@ pub async fn redis_mget<T: DeserializeOwned>(
 ) -> HubbitResult<Vec<Option<T>>> {
   let mut redis_conn = redis_pool.get().await?;
   let raw_result: Vec<Option<String>> = redis_conn.get(keys).await?;
-  Ok(
-    raw_result
-      .into_iter()
-      .map(|raw| -> HubbitResult<Option<T>> {
-        match raw {
-          Some(raw) => Ok(Some(serde_json::from_str::<T>(&raw)?)),
-          None => Ok(None),
-        }
-      })
-      .collect::<HubbitResult<Vec<Option<T>>>>()?,
-  )
+  raw_result
+    .into_iter()
+    .map(|raw| -> HubbitResult<Option<T>> {
+      match raw {
+        Some(raw) => Ok(Some(serde_json::from_str::<T>(&raw)?)),
+        None => Ok(None),
+      }
+    })
+    .collect::<HubbitResult<Vec<Option<T>>>>()
 }
