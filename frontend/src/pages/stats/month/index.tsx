@@ -9,6 +9,7 @@ import { StatsMonthQuery } from '../../../__generated__/graphql';
 import Error from '../../../components/error/Error';
 import { MONTH, StatsNavigation } from '../../../components/stats-navigation/StatsNavigation';
 import StatsTable, {
+  STATS_TABLE_ACTIVE_NOW_FRAGMENT,
   STATS_TABLE_ME_FRAGMENT,
   STATS_TABLE_STAT_FRAGMENT,
 } from '../../../components/stats-table/StatsTable';
@@ -37,10 +38,14 @@ const STATS_MONTH_QUERY = gql`
     me {
       ...StatsTableMe
     }
+    currentSessions {
+      ...StatsTableActive
+    }
   }
 
   ${STATS_TABLE_STAT_FRAGMENT}
   ${STATS_TABLE_ME_FRAGMENT}
+  ${STATS_TABLE_ACTIVE_NOW_FRAGMENT}
 `;
 
 const StatsMonth: NextPage<PageProps<StatsMonthQuery>> = ({ data }) => {
@@ -71,7 +76,7 @@ const StatsMonth: NextPage<PageProps<StatsMonthQuery>> = ({ data }) => {
           prev={`${path}?year=${data.statsMonth.prev.year}&month=${data.statsMonth.prev.month}`}
           next={`${path}?year=${data.statsMonth.next.year}&month=${data.statsMonth.next.month}`}
         />
-        <StatsTable stats={data.statsMonth.stats} me={data.me} />
+        <StatsTable stats={data.statsMonth.stats} me={data.me} currentActive={data.currentSessions} />
       </div>
     </>
   );

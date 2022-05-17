@@ -9,6 +9,7 @@ import { StatsDayQuery } from '../../../__generated__/graphql';
 import Error from '../../../components/error/Error';
 import { DAY, StatsNavigation } from '../../../components/stats-navigation/StatsNavigation';
 import StatsTable, {
+  STATS_TABLE_ACTIVE_NOW_FRAGMENT,
   STATS_TABLE_ME_FRAGMENT,
   STATS_TABLE_STAT_FRAGMENT,
 } from '../../../components/stats-table/StatsTable';
@@ -40,10 +41,14 @@ const STATS_DAY_QUERY = gql`
     me {
       ...StatsTableMe
     }
+    currentSessions {
+      ...StatsTableActive
+    }
   }
 
   ${STATS_TABLE_STAT_FRAGMENT}
   ${STATS_TABLE_ME_FRAGMENT}
+  ${STATS_TABLE_ACTIVE_NOW_FRAGMENT}
 `;
 
 const StatsDay: NextPage<PageProps<StatsDayQuery>> = ({ data }) => {
@@ -74,7 +79,7 @@ const StatsDay: NextPage<PageProps<StatsDayQuery>> = ({ data }) => {
           prev={`${path}?year=${data.statsDay.prev.year}&month=${data.statsDay.prev.month}&day=${data.statsDay.prev.day}`}
           next={`${path}?year=${data.statsDay.next.year}&month=${data.statsDay.next.month}&day=${data.statsDay.next.day}`}
         />
-        <StatsTable stats={data.statsDay.stats} me={data.me} />
+        <StatsTable stats={data.statsDay.stats} me={data.me} currentActive={data.currentSessions} />
       </div>
     </>
   );

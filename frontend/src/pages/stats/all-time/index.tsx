@@ -8,6 +8,7 @@ import { StatsAlltimeQuery } from '../../../__generated__/graphql';
 import Error from '../../../components/error/Error';
 import { ALL_TIME, StatsNavigation } from '../../../components/stats-navigation/StatsNavigation';
 import StatsTable, {
+  STATS_TABLE_ACTIVE_NOW_FRAGMENT,
   STATS_TABLE_ME_FRAGMENT,
   STATS_TABLE_STAT_FRAGMENT,
 } from '../../../components/stats-table/StatsTable';
@@ -21,10 +22,14 @@ const STATS_ALL_TIME_QUERY = gql`
     me {
       ...StatsTableMe
     }
+    currentSessions {
+      ...StatsTableActive
+    }
   }
 
   ${STATS_TABLE_STAT_FRAGMENT}
   ${STATS_TABLE_ME_FRAGMENT}
+  ${STATS_TABLE_ACTIVE_NOW_FRAGMENT}
 `;
 
 const AllTime: NextPage<PageProps<StatsAlltimeQuery>> = ({ data }) => {
@@ -39,7 +44,7 @@ const AllTime: NextPage<PageProps<StatsAlltimeQuery>> = ({ data }) => {
       </Head>
       <div className="statsWrapper">
         <StatsNavigation activeFrame={ALL_TIME} />
-        <StatsTable stats={data.statsAlltime} me={data.me} hideChange={true} />
+        <StatsTable stats={data.statsAlltime} me={data.me} hideChange={true} currentActive={data.currentSessions} />
       </div>
     </>
   );

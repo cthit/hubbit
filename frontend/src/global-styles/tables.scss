@@ -33,6 +33,18 @@
   }
 }
 
+.active-now-header {
+  max-width: 5px;
+}
+
+.inactive-now-col {
+  background-color: rgba(240, 240, 240, 1);
+}
+
+.active-now-col {
+  background-color: rgba(0, 200, 0, 1) !important;;
+}
+
 .data-table td, .data-table th {
   padding: 0 18px 12px 18px;
 }
