@@ -9,6 +9,7 @@ import { Period, StatsStudyPeriodQuery } from '../../../__generated__/graphql';
 import Error from '../../../components/error/Error';
 import { StatsNavigation, STUDY_PERIOD } from '../../../components/stats-navigation/StatsNavigation';
 import StatsTable, {
+  STATS_TABLE_ACTIVE_NOW_FRAGMENT,
   STATS_TABLE_ME_FRAGMENT,
   STATS_TABLE_STAT_FRAGMENT,
 } from '../../../components/stats-table/StatsTable';
@@ -27,10 +28,14 @@ const STATS_STUDY_PERIOD_QUERY = gql`
     me {
       ...StatsTableMe
     }
+    currentSessions {
+      ...StatsTableActive
+    }
   }
 
   ${STATS_TABLE_STAT_FRAGMENT}
   ${STATS_TABLE_ME_FRAGMENT}
+  ${STATS_TABLE_ACTIVE_NOW_FRAGMENT}
 `;
 
 const LP1 = 'LP1';
@@ -77,7 +82,7 @@ const StudyPeriod: NextPage<PageProps<StatsStudyPeriodQuery>> = ({ data }) => {
           prev={`${path}?year=${prevYear}&period=${prevPeriod.toUpperCase()}`}
           next={`${path}?year=${nextYear}&period=${nextPeriod.toUpperCase()}`}
         />
-        <StatsTable stats={data.statsStudyPeriod.stats} me={data.me} />
+        <StatsTable stats={data.statsStudyPeriod.stats} me={data.me} currentActive={data.currentSessions} />
       </div>
     </>
   );

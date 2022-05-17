@@ -9,6 +9,7 @@ import { StatsMonthQuery, StatsWeekQuery } from '../../../__generated__/graphql'
 import Error from '../../../components/error/Error';
 import { StatsNavigation, WEEK } from '../../../components/stats-navigation/StatsNavigation';
 import StatsTable, {
+  STATS_TABLE_ACTIVE_NOW_FRAGMENT,
   STATS_TABLE_ME_FRAGMENT,
   STATS_TABLE_STAT_FRAGMENT,
 } from '../../../components/stats-table/StatsTable';
@@ -37,10 +38,14 @@ const STATS_WEEK_QUERY = gql`
     me {
       ...StatsTableMe
     }
+    currentSessions {
+      ...StatsTableActive
+    }
   }
 
   ${STATS_TABLE_STAT_FRAGMENT}
   ${STATS_TABLE_ME_FRAGMENT}
+  ${STATS_TABLE_ACTIVE_NOW_FRAGMENT}
 `;
 
 const StatsWeek: NextPage<PageProps<StatsWeekQuery>> = ({ data }) => {
@@ -63,7 +68,7 @@ const StatsWeek: NextPage<PageProps<StatsWeekQuery>> = ({ data }) => {
           prev={`${path}?year=${data.statsWeek.prev.year}&week=${data.statsWeek.prev.week}`}
           next={`${path}?year=${data.statsWeek.next.year}&week=${data.statsWeek.next.week}`}
         />
-        <StatsTable stats={data.statsWeek.stats} me={data.me} />
+        <StatsTable stats={data.statsWeek.stats} me={data.me} currentActive={data.currentSessions} />
       </div>
     </>
   );
