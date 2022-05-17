@@ -1,4 +1,4 @@
-use async_graphql::{guard::Guard, Context, Object, SimpleObject};
+use async_graphql::{Context, Object, SimpleObject};
 use chrono::{DateTime, Utc};
 use log::error;
 
@@ -12,7 +12,7 @@ pub struct SessionQuery;
 
 #[Object]
 impl SessionQuery {
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn current_sessions(
     &self,
     context: &Context<'_>,

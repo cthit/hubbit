@@ -1,4 +1,4 @@
-use async_graphql::{guard::Guard, Context, InputObject, Object, SimpleObject};
+use async_graphql::{Context, InputObject, Object, SimpleObject};
 use chrono::{DateTime, Duration, Local, Utc};
 use log::error;
 use serde::{Deserialize, Serialize};
@@ -33,7 +33,7 @@ pub struct Group {
 
 #[Object]
 impl UserQuery {
-  #[graphql(guard(AuthGuard()))]
+  #[graphql(guard = "AuthGuard::default()")]
   pub async fn user(
     &self,
     context: &Context<'_>,

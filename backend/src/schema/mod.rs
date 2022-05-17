@@ -6,9 +6,7 @@ pub mod user;
 
 use std::fmt::Display;
 
-use async_graphql::{
-  guard::Guard, Context, ErrorExtensions, MergedObject, Result, Schema, Subscription,
-};
+use async_graphql::{Context, ErrorExtensions, Guard, MergedObject, Result, Schema, Subscription};
 use async_trait::async_trait;
 use futures::StreamExt;
 
@@ -107,6 +105,7 @@ impl Display for HubbitSchemaError {
   }
 }
 
+#[derive(Default)]
 pub struct AuthGuard;
 
 #[async_trait]

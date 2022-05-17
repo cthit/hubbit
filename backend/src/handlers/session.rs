@@ -1,6 +1,6 @@
 use actix_web::{
   web::{self, ServiceConfig},
-  HttpResponse,
+  HttpRequest, HttpResponse,
 };
 use actix_web_httpauth::headers::authorization::{Bearer, Scheme};
 use log::warn;
@@ -22,7 +22,7 @@ struct SessionRequest {
 
 async fn update_sessions(
   session_req: web::Json<SessionRequest>,
-  http_req: web::HttpRequest,
+  http_req: HttpRequest,
   pool: web::Data<PgPool>,
 ) -> HubbitResult<HttpResponse> {
   let pool = PgPool::clone(&pool);

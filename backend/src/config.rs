@@ -2,7 +2,7 @@ use std::{env, str::FromStr};
 
 #[derive(Clone, Debug)]
 pub struct Config {
-  pub port: String,
+  pub port: u16,
   pub db_url: String,
   pub redis_url: String,
   pub gamma_public_url: String,
