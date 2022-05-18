@@ -21,7 +21,9 @@ const USER_STATS_QUERY = gql`
     user(input: $input) {
       ...UserStats
       ...UserHourStats
-      ...UserRecentSessions
+      recentSessions {
+        ...UserRecentSessions
+      }
 
       nick
       cid
@@ -58,7 +60,7 @@ const UserStats: NextPage<PageProps<UserStatsQuery>> = ({ data }) => {
         <div className={styles.showSection}>
           <UserStatsCards user={data.user} />
           <HoursInHubbGraph user={data.user} />
-          <UserRecentSessionsList user={data.user} />
+          {data.user.recentSessions && <UserRecentSessionsList recentSessions={data.user.recentSessions} />}
         </div>
       </div>
     </>

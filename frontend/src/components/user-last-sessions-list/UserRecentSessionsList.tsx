@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { gql } from '@urql/core';
 import dateFormat from 'dateformat';
-import gql from 'graphql-tag';
 
 import { UserRecentSessionsFragment } from '../../__generated__/graphql';
 import { getHoursDiff } from '../../dateUtil';
@@ -9,19 +9,17 @@ import { getHoursDiff } from '../../dateUtil';
 import styles from './UserRecentSessionsList.module.scss';
 
 export const USER_RECENT_SESSIONS_FRAGMENT = gql`
-  fragment UserRecentSessions on User {
-    recentSessions {
-      endTime
-      startTime
-    }
+  fragment UserRecentSessions on Session {
+    endTime
+    startTime
   }
 `;
 
 interface Props {
-  user: UserRecentSessionsFragment;
+  recentSessions: UserRecentSessionsFragment[];
 }
 
-const UserRecentSessionsList = ({ user }: Props) => {
+const UserRecentSessionsList = ({ recentSessions }: Props) => {
   const year = new Date().getFullYear();
 
   return (
@@ -34,7 +32,7 @@ const UserRecentSessionsList = ({ user }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {user.recentSessions.map((session, index) => {
+            {recentSessions.map((session, index) => {
               const startTime = new Date(session.startTime);
               const endTime = new Date(session.endTime);
               const fmt = startTime.getFullYear() == year ? 'dddd d mmmm HH:MM' : 'dddd d mmmm HH:MM yyyy';

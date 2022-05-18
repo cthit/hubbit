@@ -3,7 +3,6 @@ import React, { createContext, useContext } from 'react';
 import { gql } from '@urql/core';
 
 import { AuthUserQuery, useAuthUserQuery } from '../__generated__/graphql';
-import Error from '../components/error/Error';
 
 gql`
   query AuthUser {
@@ -25,7 +24,6 @@ export const AuthProvider = ({ children }: React.PropsWithChildren<any>) => {
   const [{ data, error }] = useAuthUserQuery();
 
   if (error) {
-    console.log('Error retrieving auth context', error);
     return (
       <div className="center">
         <div className="card">

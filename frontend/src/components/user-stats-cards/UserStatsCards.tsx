@@ -12,7 +12,7 @@ import {
   timeBetween,
   timeSince,
 } from '../../dateUtil';
-import UserStatsCard from '../UserStatsCard/UserStatsCard';
+import UserStatsCard from '../user-stats-card/UserStatsCard';
 
 import styles from './UserStatsCards.module.scss';
 

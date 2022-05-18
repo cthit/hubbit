@@ -70,56 +70,56 @@ impl User {
 
   async fn cid(&self, context: &Context<'_>) -> HubbitSchemaResult<String> {
     let user_service = context.data_unchecked::<UserService>();
-    let user = user_service
-      .get_by_id(self.id, false)
-      .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+    let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
     Ok(user.cid)
   }
 
   async fn nick(&self, context: &Context<'_>) -> HubbitSchemaResult<String> {
     let user_service = context.data_unchecked::<UserService>();
-    let user = user_service
-      .get_by_id(self.id, false)
-      .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+    let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
     Ok(user.nick)
   }
 
   async fn first_name(&self, context: &Context<'_>) -> HubbitSchemaResult<String> {
     let user_service = context.data_unchecked::<UserService>();
-    let user = user_service
-      .get_by_id(self.id, false)
-      .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+    let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
     Ok(user.first_name)
   }
 
   async fn last_name(&self, context: &Context<'_>) -> HubbitSchemaResult<String> {
     let user_service = context.data_unchecked::<UserService>();
-    let user = user_service
-      .get_by_id(self.id, false)
-      .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+    let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
     Ok(user.last_name)
   }
 
   async fn avatar_url(&self, context: &Context<'_>) -> HubbitSchemaResult<String> {
     let user_service = context.data_unchecked::<UserService>();
-    let user = user_service
-      .get_by_id(self.id, false)
-      .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+    let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
     Ok(user.avatar_url)
   }
 
   async fn groups(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Group>> {
     let user_service = context.data_unchecked::<UserService>();
     let config = context.data_unchecked::<Config>();
-    let user = user_service
-      .get_by_id(self.id, false)
-      .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+    let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
     let mut groups = user
       .groups
       .into_iter()
@@ -143,17 +143,31 @@ impl User {
       hour_stats_service
         .get_for_user(self.id)
         .await
-        .map_err(|_| HubbitSchemaError::InternalError)?,
+        .map_err(|e| {
+          error!("[Schema error] {:?}", e);
+          HubbitSchemaError::InternalError
+        })?,
     )
   }
 
-  async fn recent_sessions(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Session>> {
+  async fn recent_sessions(
+    &self,
+    context: &Context<'_>,
+  ) -> HubbitSchemaResult<Option<Vec<Session>>> {
+    let user = context.data_unchecked::<GammaUser>();
+    if user.id != self.id {
+      return Ok(None);
+    }
+
     let user_session_repo = context.data_unchecked::<UserSessionRepository>();
     let sessions = user_session_repo
       .get_range_for_user(*MIN_DATETIME, *MAX_DATETIME, self.id)
       .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
-    Ok(
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?;
+    Ok(Some(
       sessions
         .iter()
         .map(|session| Session {
@@ -162,7 +176,7 @@ impl User {
         })
         .take(10)
         .collect(),
-    )
+    ))
   }
 
   async fn longest_session(&self, context: &Context<'_>) -> HubbitSchemaResult<Option<Session>> {
@@ -170,7 +184,10 @@ impl User {
     let sessions = user_session_repo
       .get_range_for_user(*MIN_DATETIME, *MAX_DATETIME, self.id)
       .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?;
     let mut longest_session: Option<UserSession> = None;
     for session in sessions {
       if let Some(longest_session_inner) = &longest_session {
@@ -195,7 +212,10 @@ impl User {
     let sessions = user_session_repo
       .get_range_for_user(*MIN_DATETIME, *MAX_DATETIME, self.id)
       .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?;
 
     let duration_ms = sessions.iter().fold(0, |prev, cur| {
       prev + (cur.end_time - cur.start_time).num_milliseconds()
@@ -209,18 +229,26 @@ impl User {
     let sessions = user_session_repo
       .get_range_for_user(*MIN_DATETIME, *MAX_DATETIME, self.id)
       .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?;
 
     let duration_ms = sessions.iter().fold(0, |prev, cur| {
       prev + (cur.end_time - cur.start_time).num_milliseconds()
     });
 
     let all_time_seconds = duration_ms / 1000;
-    let first_day = user_session_repo
+    let first_day = match user_session_repo
       .get_first_entry_day(self.id)
       .await
-      .map_err(|_| HubbitSchemaError::InternalError)?
-      .ok_or(HubbitSchemaError::InternalError)?;
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })? {
+      Some(first_day) => first_day,
+      None => return Ok(0),
+    };
 
     let today = Local::now();
     let num_days_since_first = today.signed_duration_since(first_day.start_time).num_days();
@@ -241,7 +269,10 @@ impl User {
     let sessions = user_session_repo
       .get_range_for_user(today_start, today_end, self.id)
       .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?;
 
     let duration_ms = sessions.iter().fold(0, |prev, curr| {
       let start_time = if curr.start_time.date().eq(&today) {
@@ -269,10 +300,10 @@ impl User {
     }
 
     let device_repo = context.data_unchecked::<DeviceRepository>();
-    let devices = device_repo
-      .get_for_user(self.id)
-      .await
-      .map_err(|_| HubbitSchemaError::InternalError)?;
+    let devices = device_repo.get_for_user(self.id).await.map_err(|e| {
+      error!("[Schema error] {:?}", e);
+      HubbitSchemaError::InternalError
+    })?;
     Ok(
       devices
         .into_iter()

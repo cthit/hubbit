@@ -1,6 +1,6 @@
 import React from 'react';
 
-import gql from 'graphql-tag';
+import { gql } from '@urql/core';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { UserHourStatsFragment } from '../../__generated__/graphql';
