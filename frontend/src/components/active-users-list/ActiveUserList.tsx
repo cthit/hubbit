@@ -20,9 +20,10 @@ export const ACTIVE_USER_FRAGMENT = gql`
 
 interface Props {
   sessions: ActiveUserFragment[];
+  loggedInUser: string;
 }
 
-const ActiveUserList = ({ sessions }: Props) => {
+const ActiveUserList = ({ sessions, loggedInUser }: Props) => {
   const [currTime, setCurrTime] = useState(new Date());
 
   useEffect(() => {
@@ -69,7 +70,11 @@ const ActiveUserList = ({ sessions }: Props) => {
               const startTime = new Date(session.startTime);
 
               return (
-                <tr key={session.user.cid} id={session.user.cid} className="data-table-row">
+                <tr
+                  key={session.user.cid}
+                  id={session.user.cid}
+                  className={`data-table-row ${session.user.cid === loggedInUser && 'active-row'}`}
+                >
                   <td className={styles.userRow}>
                     <a href={`/users/${session.user.cid}`}>{formatNick(session.user.cid, session.user.nick)}</a>
                   </td>
