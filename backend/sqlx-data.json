@@ -1,45 +1,39 @@
 {
   "db": "PostgreSQL",
   "0f71815a79c870b57bb4e7f026414cd67a87a65e6a431ffc281e1c83bf7535e6": {
-    "query": "\nSELECT *\nFROM devices\nWHERE user_id = $1\n        ",
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 1,
           "name": "user_id",
+          "ordinal": 1,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 2,
           "name": "address",
+          "ordinal": 2,
           "type_info": "Bpchar"
         },
         {
-          "ordinal": 3,
           "name": "name",
+          "ordinal": 3,
           "type_info": "Varchar"
         },
         {
-          "ordinal": 4,
           "name": "created_at",
+          "ordinal": 4,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 5,
           "name": "updated_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         }
       ],
-      "parameters": {
-        "Left": [
-          "Uuid"
-        ]
-      },
       "nullable": [
         false,
         false,
@@ -47,43 +41,168 @@
         false,
         false,
         false
-      ]
-    }
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid"
+        ]
+      }
+    },
+    "query": "\nSELECT *\nFROM devices\nWHERE user_id = $1\n        "
   },
-  "17941bac79c37eb7fcc3c41f2c9d8d7f5873ca1604129435b04a742cf396a18b": {
-    "query": "\nUPDATE devices\nSET\n  address = $1,\n  name = $2\nWHERE address = $3\nRETURNING *\n        ",
+  "102deaab74a199bd61c10bf2c7ee008ea6407321a59daea39fe32ba34eab0570": {
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 1,
           "name": "user_id",
+          "ordinal": 1,
           "type_info": "Uuid"
         },
         {
+          "name": "mac_address",
           "ordinal": 2,
-          "name": "address",
           "type_info": "Bpchar"
         },
         {
+          "name": "start_time",
           "ordinal": 3,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "end_time",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 6,
+          "type_info": "Timestamptz"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Bpchar"
+        ]
+      }
+    },
+    "query": "\nSELECT *\nFROM sessions\nWHERE mac_address = $1 AND end_time + (15 * interval '1 minute') > NOW()\nLIMIT 1\n      "
+  },
+  "12ededa21ed2b06e359c253baa556749ad9d486ef4808ab14c8288391f2f6ca1": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "mac_address",
+          "ordinal": 2,
+          "type_info": "Bpchar"
+        },
+        {
+          "name": "start_time",
+          "ordinal": 3,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "end_time",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 6,
+          "type_info": "Timestamptz"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "BpcharArray"
+        ]
+      }
+    },
+    "query": "\nUPDATE sessions\nSET end_time = NOW() + (5 * interval '1 minute')\nWHERE mac_address = ANY($1) AND end_time + (15 * interval '1 minute') > NOW()\nRETURNING *\n      "
+  },
+  "17941bac79c37eb7fcc3c41f2c9d8d7f5873ca1604129435b04a742cf396a18b": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "address",
+          "ordinal": 2,
+          "type_info": "Bpchar"
+        },
+        {
           "name": "name",
+          "ordinal": 3,
           "type_info": "Varchar"
         },
         {
-          "ordinal": 4,
           "name": "created_at",
+          "ordinal": 4,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 5,
           "name": "updated_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
       ],
       "parameters": {
         "Left": [
@@ -91,55 +210,44 @@
           "Varchar",
           "Bpchar"
         ]
-      },
-      "nullable": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
-    }
+      }
+    },
+    "query": "\nUPDATE devices\nSET\n  address = $1,\n  name = $2\nWHERE address = $3\nRETURNING *\n        "
   },
   "2270f0282a12559e896420705557b66828173b6bb973e45e8cb77a23164b6ca6": {
-    "query": "\nSELECT *\nFROM study_years\nWHERE start_date < NOW() AND NOW() < end_date\nLIMIT 1\n      ",
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 1,
           "name": "year",
+          "ordinal": 1,
           "type_info": "Int4"
         },
         {
-          "ordinal": 2,
           "name": "start_date",
+          "ordinal": 2,
           "type_info": "Date"
         },
         {
-          "ordinal": 3,
           "name": "end_date",
+          "ordinal": 3,
           "type_info": "Date"
         },
         {
-          "ordinal": 4,
           "name": "created_at",
+          "ordinal": 4,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 5,
           "name": "updated_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         }
       ],
-      "parameters": {
-        "Left": []
-      },
       "nullable": [
         false,
         false,
@@ -147,55 +255,66 @@
         false,
         false,
         false
-      ]
-    }
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "\nSELECT *\nFROM study_years\nWHERE start_date < NOW() AND NOW() < end_date\nLIMIT 1\n      "
   },
   "264bbd05b957d4de626dac6d6662eb5fcb4febdf165a75be3fac96ffc8d12199": {
-    "query": "\nDELETE FROM devices\nWHERE address = $1\n      ",
     "describe": {
       "columns": [],
+      "nullable": [],
       "parameters": {
         "Left": [
           "Bpchar"
         ]
-      },
-      "nullable": []
-    }
+      }
+    },
+    "query": "\nDELETE FROM devices\nWHERE address = $1\n      "
   },
   "2872539a545a9ea255105d95e0eed039dd04f0e9fceb9b6e8e5849506cb23430": {
-    "query": "\nINSERT INTO devices (user_id, address, name)\nVALUES ($1, $2, $3)\nRETURNING *\n        ",
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 1,
           "name": "user_id",
+          "ordinal": 1,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 2,
           "name": "address",
+          "ordinal": 2,
           "type_info": "Bpchar"
         },
         {
-          "ordinal": 3,
           "name": "name",
+          "ordinal": 3,
           "type_info": "Varchar"
         },
         {
-          "ordinal": 4,
           "name": "created_at",
+          "ordinal": 4,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 5,
           "name": "updated_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
       ],
       "parameters": {
         "Left": [
@@ -203,7 +322,44 @@
           "Bpchar",
           "Varchar"
         ]
-      },
+      }
+    },
+    "query": "\nINSERT INTO devices (user_id, address, name)\nVALUES ($1, $2, $3)\nRETURNING *\n        "
+  },
+  "39f9215e98f6ea19d6a471222ba43d5b3c562a5d313c6f4df0b3097125812508": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "year",
+          "ordinal": 1,
+          "type_info": "Int4"
+        },
+        {
+          "name": "start_date",
+          "ordinal": 2,
+          "type_info": "Date"
+        },
+        {
+          "name": "end_date",
+          "ordinal": 3,
+          "type_info": "Date"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        }
+      ],
       "nullable": [
         false,
         false,
@@ -211,49 +367,49 @@
         false,
         false,
         false
-      ]
-    }
-  },
-  "39f9215e98f6ea19d6a471222ba43d5b3c562a5d313c6f4df0b3097125812508": {
-    "query": "\nSELECT *\nFROM study_years\nWHERE year = $1\n      ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "year",
-          "type_info": "Int4"
-        },
-        {
-          "ordinal": 2,
-          "name": "start_date",
-          "type_info": "Date"
-        },
-        {
-          "ordinal": 3,
-          "name": "end_date",
-          "type_info": "Date"
-        },
-        {
-          "ordinal": 4,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 5,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
       ],
       "parameters": {
         "Left": [
           "Int4"
         ]
-      },
+      }
+    },
+    "query": "\nSELECT *\nFROM study_years\nWHERE year = $1\n      "
+  },
+  "484062ad76551609d5208a655a4ff2f2a479cb0acd8e67ac2eba2e8da21e5344": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "start_time",
+          "ordinal": 2,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "end_time",
+          "ordinal": 3,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        }
+      ],
       "nullable": [
         false,
         false,
@@ -261,50 +417,50 @@
         false,
         false,
         false
-      ]
-    }
-  },
-  "484062ad76551609d5208a655a4ff2f2a479cb0acd8e67ac2eba2e8da21e5344": {
-    "query": "\nSELECT *\nFROM user_sessions\nWHERE end_time > $1 AND start_time < $2\nORDER BY start_time DESC\n        ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "user_id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 2,
-          "name": "start_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 3,
-          "name": "end_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 4,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 5,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
       ],
       "parameters": {
         "Left": [
           "Timestamptz",
           "Timestamptz"
         ]
-      },
+      }
+    },
+    "query": "\nSELECT *\nFROM user_sessions\nWHERE end_time > $1 AND start_time < $2\nORDER BY start_time DESC\n        "
+  },
+  "48580297b14e9c9f11fb035c4f6149d6842fa81c6ffeaa22225fc6b83aec129d": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "address",
+          "ordinal": 2,
+          "type_info": "Bpchar"
+        },
+        {
+          "name": "name",
+          "ordinal": 3,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        }
+      ],
       "nullable": [
         false,
         false,
@@ -312,104 +468,54 @@
         false,
         false,
         false
-      ]
-    }
-  },
-  "48580297b14e9c9f11fb035c4f6149d6842fa81c6ffeaa22225fc6b83aec129d": {
-    "query": "\nSELECT *\nFROM devices\nWHERE id = $1\n        ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "user_id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 2,
-          "name": "address",
-          "type_info": "Bpchar"
-        },
-        {
-          "ordinal": 3,
-          "name": "name",
-          "type_info": "Varchar"
-        },
-        {
-          "ordinal": 4,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 5,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
       ],
       "parameters": {
         "Left": [
           "Uuid"
         ]
-      },
-      "nullable": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
-    }
+      }
+    },
+    "query": "\nSELECT *\nFROM devices\nWHERE id = $1\n        "
   },
-  "524cde4b3a5b60e29b1b70f7abeccb74cebb251b5e98d325dbe87e58c339fcd9": {
-    "query": "\nUPDATE sessions\nSET end_time = NOW() + (5 * interval '1 minute')\nWHERE mac_address = ANY($1) AND end_time + (10 * interval '1 minute') > NOW()\nRETURNING *\n      ",
+  "572ab49b1f194ee667cf2f6a1ce23df88924fdd76bbe8831acd72726def228f3": {
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
+          "name": "year",
           "ordinal": 1,
-          "name": "user_id",
-          "type_info": "Uuid"
+          "type_info": "Int4"
         },
         {
+          "name": "period",
           "ordinal": 2,
-          "name": "mac_address",
-          "type_info": "Bpchar"
+          "type_info": "Int4"
         },
         {
+          "name": "start_date",
           "ordinal": 3,
-          "name": "start_time",
-          "type_info": "Timestamptz"
+          "type_info": "Date"
         },
         {
+          "name": "end_date",
           "ordinal": 4,
-          "name": "end_time",
-          "type_info": "Timestamptz"
+          "type_info": "Date"
         },
         {
-          "ordinal": 5,
           "name": "created_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 6,
           "name": "updated_at",
+          "ordinal": 6,
           "type_info": "Timestamptz"
         }
       ],
-      "parameters": {
-        "Left": [
-          "BpcharArray"
-        ]
-      },
       "nullable": [
         false,
         false,
@@ -418,112 +524,105 @@
         false,
         false,
         false
-      ]
-    }
-  },
-  "572ab49b1f194ee667cf2f6a1ce23df88924fdd76bbe8831acd72726def228f3": {
-    "query": "\nSELECT *\nFROM study_periods\nWHERE year = $1 AND period = $2\n      ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "year",
-          "type_info": "Int4"
-        },
-        {
-          "ordinal": 2,
-          "name": "period",
-          "type_info": "Int4"
-        },
-        {
-          "ordinal": 3,
-          "name": "start_date",
-          "type_info": "Date"
-        },
-        {
-          "ordinal": 4,
-          "name": "end_date",
-          "type_info": "Date"
-        },
-        {
-          "ordinal": 5,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 6,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
       ],
       "parameters": {
         "Left": [
           "Int4",
           "Int4"
         ]
-      },
+      }
+    },
+    "query": "\nSELECT *\nFROM study_periods\nWHERE year = $1 AND period = $2\n      "
+  },
+  "6a9ac04404d86e0fd476e8ed5ef8d5013baddfcd9c4d8c93787fdd47c784777f": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "start_time",
+          "ordinal": 2,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "end_time",
+          "ordinal": 3,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        }
+      ],
       "nullable": [
         false,
         false,
         false,
         false,
         false,
-        false,
         false
-      ]
-    }
-  },
-  "8c019104b8952f716b3fe29db1a9d0f0a250827efa2bb3474661073716110a22": {
-    "query": "\nINSERT INTO user_sessions (user_id, start_time, end_time)\nSELECT user_id, NOW(), NOW() + (10 * interval '1 minute')\nFROM UNNEST($1::uuid[]) as user_id\n      ",
-    "describe": {
-      "columns": [],
+      ],
       "parameters": {
-        "Left": [
-          "UuidArray"
-        ]
-      },
-      "nullable": []
-    }
+        "Left": []
+      }
+    },
+    "query": "\nSELECT *\nFROM user_sessions\nWHERE end_time + (15 * interval '1 minute') > NOW()\nORDER BY start_time DESC\n        "
   },
   "a9c6a44b2e9cc5fcefa4c26b2e9bdfa3c7a40a3d850f7008f9fa6aab532304f6": {
-    "query": "\nSELECT *\nFROM user_sessions\nWHERE user_id = $1 AND end_time > $2 AND start_time < $3\nORDER BY start_time DESC\n        ",
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 1,
           "name": "user_id",
+          "ordinal": 1,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 2,
           "name": "start_time",
+          "ordinal": 2,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 3,
           "name": "end_time",
+          "ordinal": 3,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 4,
           "name": "created_at",
+          "ordinal": 4,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 5,
           "name": "updated_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
       ],
       "parameters": {
         "Left": [
@@ -531,201 +630,182 @@
           "Timestamptz",
           "Timestamptz"
         ]
-      },
-      "nullable": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
-    }
-  },
-  "b00ac2ebbd6dfbc53da6830e2d9f73169bc18ca902ed9395374127aab12d9d17": {
-    "query": "\nSELECT *\nFROM sessions\nWHERE mac_address = $1 AND end_time + (10 * interval '1 minute') > NOW()\nLIMIT 1\n      ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "user_id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 2,
-          "name": "mac_address",
-          "type_info": "Bpchar"
-        },
-        {
-          "ordinal": 3,
-          "name": "start_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 4,
-          "name": "end_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 5,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 6,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
-      ],
-      "parameters": {
-        "Left": [
-          "Bpchar"
-        ]
-      },
-      "nullable": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
-    }
+      }
+    },
+    "query": "\nSELECT *\nFROM user_sessions\nWHERE user_id = $1 AND end_time > $2 AND start_time < $3\nORDER BY start_time DESC\n        "
   },
   "b066a23f1d603ab1cc7be062c178fc813ba215e8f3bf5c5adaa59a6c084794c3": {
-    "query": "\nSELECT *\nFROM devices\nWHERE address = ANY($1)\n        ",
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 1,
           "name": "user_id",
+          "ordinal": 1,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 2,
           "name": "address",
+          "ordinal": 2,
           "type_info": "Bpchar"
         },
         {
-          "ordinal": 3,
           "name": "name",
+          "ordinal": 3,
           "type_info": "Varchar"
         },
         {
-          "ordinal": 4,
           "name": "created_at",
+          "ordinal": 4,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 5,
           "name": "updated_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
       ],
       "parameters": {
         "Left": [
           "BpcharArray"
         ]
-      },
+      }
+    },
+    "query": "\nSELECT *\nFROM devices\nWHERE address = ANY($1)\n        "
+  },
+  "bb7debbaa13b268021369268de99c4613b40b431d93aac5fa5a6f70c8e2d3db1": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "token",
+          "ordinal": 1,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 2,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 3,
+          "type_info": "Timestamptz"
+        }
+      ],
       "nullable": [
         false,
         false,
         false,
-        false,
-        false,
         false
-      ]
-    }
-  },
-  "bb7debbaa13b268021369268de99c4613b40b431d93aac5fa5a6f70c8e2d3db1": {
-    "query": "\nSELECT *\nFROM api_keys\nWHERE token = $1\n        ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "token",
-          "type_info": "Varchar"
-        },
-        {
-          "ordinal": 2,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 3,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
       ],
       "parameters": {
         "Left": [
           "Text"
         ]
-      },
+      }
+    },
+    "query": "\nSELECT *\nFROM api_keys\nWHERE token = $1\n        "
+  },
+  "bee0ccc4b6d29f9a1de05930c5bf32663f78d386c6d20c998ee6e35be6be62d0": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "start_time",
+          "ordinal": 2,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "end_time",
+          "ordinal": 3,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        }
+      ],
       "nullable": [
         false,
         false,
         false,
+        false,
+        false,
         false
-      ]
-    }
-  },
-  "bee0ccc4b6d29f9a1de05930c5bf32663f78d386c6d20c998ee6e35be6be62d0": {
-    "query": "\nUPDATE user_sessions\nSET end_time = NOW() + (5 * interval '1 minute')\nWHERE user_id = ANY($1) AND end_time + (15 * interval '1 minute') > NOW()\nRETURNING *\n      ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "user_id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 2,
-          "name": "start_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 3,
-          "name": "end_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 4,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 5,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
       ],
       "parameters": {
         "Left": [
           "UuidArray"
         ]
-      },
+      }
+    },
+    "query": "\nUPDATE user_sessions\nSET end_time = NOW() + (5 * interval '1 minute')\nWHERE user_id = ANY($1) AND end_time + (15 * interval '1 minute') > NOW()\nRETURNING *\n      "
+  },
+  "c59db58a285309fc6001b72bee2440f8c4730b3ad45630323e894d39400aa7e5": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "start_time",
+          "ordinal": 2,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "end_time",
+          "ordinal": 3,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 4,
+          "type_info": "Timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "ordinal": 5,
+          "type_info": "Timestamptz"
+        }
+      ],
       "nullable": [
         false,
         false,
@@ -733,163 +813,67 @@
         false,
         false,
         false
-      ]
-    }
-  },
-  "c59db58a285309fc6001b72bee2440f8c4730b3ad45630323e894d39400aa7e5": {
-    "query": "\nSELECT * \nFROM user_sessions \nWHERE user_id = $1 \nORDER BY start_time\nLIMIT 1;\n      ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "user_id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 2,
-          "name": "start_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 3,
-          "name": "end_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 4,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 5,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
       ],
       "parameters": {
         "Left": [
           "Uuid"
         ]
-      },
-      "nullable": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
-    }
+      }
+    },
+    "query": "\nSELECT * \nFROM user_sessions \nWHERE user_id = $1 \nORDER BY start_time\nLIMIT 1;\n      "
   },
   "cc3e0d48436903bfd2da63609f81dd7948adf67a71ebdeb196ea00d4a03add1f": {
-    "query": "\nINSERT INTO sessions (user_id, mac_address, start_time, end_time)\nSELECT data.user_id, data.mac_address, NOW(), NOW() + (5 * interval '1 minute')\nFROM UNNEST($1::uuid[], $2::CHAR(17)[]) as data(user_id, mac_address)\n      ",
     "describe": {
       "columns": [],
+      "nullable": [],
       "parameters": {
         "Left": [
           "UuidArray",
           "BpcharArray"
         ]
-      },
-      "nullable": []
-    }
-  },
-  "d0e2e35a337978cde656f924a68eaa50634629fb6dbf8a386a420e836b89b476": {
-    "query": "\nSELECT *\nFROM user_sessions\nWHERE end_time + (10 * interval '1 minute') > NOW()\nORDER BY start_time DESC\n        ",
-    "describe": {
-      "columns": [
-        {
-          "ordinal": 0,
-          "name": "id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 1,
-          "name": "user_id",
-          "type_info": "Uuid"
-        },
-        {
-          "ordinal": 2,
-          "name": "start_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 3,
-          "name": "end_time",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 4,
-          "name": "created_at",
-          "type_info": "Timestamptz"
-        },
-        {
-          "ordinal": 5,
-          "name": "updated_at",
-          "type_info": "Timestamptz"
-        }
-      ],
-      "parameters": {
-        "Left": []
-      },
-      "nullable": [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
-    }
+      }
+    },
+    "query": "\nINSERT INTO sessions (user_id, mac_address, start_time, end_time)\nSELECT data.user_id, data.mac_address, NOW(), NOW() + (5 * interval '1 minute')\nFROM UNNEST($1::uuid[], $2::CHAR(17)[]) as data(user_id, mac_address)\n      "
   },
   "d412060f6c54602fffb43b1bbaffffc037c9ab50cb3f41c1ee3be4dd963f2cfa": {
-    "query": "\nSELECT *\nFROM study_periods\nWHERE start_date < NOW() AND end_date > NOW()\n      ",
     "describe": {
       "columns": [
         {
-          "ordinal": 0,
           "name": "id",
+          "ordinal": 0,
           "type_info": "Uuid"
         },
         {
-          "ordinal": 1,
           "name": "year",
+          "ordinal": 1,
           "type_info": "Int4"
         },
         {
-          "ordinal": 2,
           "name": "period",
+          "ordinal": 2,
           "type_info": "Int4"
         },
         {
-          "ordinal": 3,
           "name": "start_date",
+          "ordinal": 3,
           "type_info": "Date"
         },
         {
-          "ordinal": 4,
           "name": "end_date",
+          "ordinal": 4,
           "type_info": "Date"
         },
         {
-          "ordinal": 5,
           "name": "created_at",
+          "ordinal": 5,
           "type_info": "Timestamptz"
         },
         {
-          "ordinal": 6,
           "name": "updated_at",
+          "ordinal": 6,
           "type_info": "Timestamptz"
         }
       ],
-      "parameters": {
-        "Left": []
-      },
       "nullable": [
         false,
         false,
@@ -898,7 +882,23 @@
         false,
         false,
         false
-      ]
-    }
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "\nSELECT *\nFROM study_periods\nWHERE start_date < NOW() AND end_date > NOW()\n      "
+  },
+  "d8aa702e3447a8c36bf204d8eb766cf707c422750ee7541e196601aba0154222": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "UuidArray"
+        ]
+      }
+    },
+    "query": "\nINSERT INTO user_sessions (user_id, start_time, end_time)\nSELECT user_id, NOW(), NOW() + (5 * interval '1 minute')\nFROM UNNEST($1::uuid[]) as user_id\n      "
   }
 }

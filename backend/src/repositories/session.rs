@@ -19,7 +19,7 @@ impl SessionRepository {
       "
 SELECT *
 FROM sessions
-WHERE mac_address = $1 AND end_time + (10 * interval '1 minute') > NOW()
+WHERE mac_address = $1 AND end_time + (15 * interval '1 minute') > NOW()
 LIMIT 1
       ",
       mac_addr
@@ -43,7 +43,7 @@ LIMIT 1
       "
 UPDATE sessions
 SET end_time = NOW() + (5 * interval '1 minute')
-WHERE mac_address = ANY($1) AND end_time + (10 * interval '1 minute') > NOW()
+WHERE mac_address = ANY($1) AND end_time + (15 * interval '1 minute') > NOW()
 RETURNING *
       ",
       macs.as_slice()

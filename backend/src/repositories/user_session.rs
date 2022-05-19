@@ -87,7 +87,7 @@ LIMIT 1;
         "
 SELECT *
 FROM user_sessions
-WHERE end_time + (10 * interval '1 minute') > NOW()
+WHERE end_time + (15 * interval '1 minute') > NOW()
 ORDER BY start_time DESC
         ",
       )
@@ -123,7 +123,7 @@ RETURNING *
     sqlx::query!(
       "
 INSERT INTO user_sessions (user_id, start_time, end_time)
-SELECT user_id, NOW(), NOW() + (10 * interval '1 minute')
+SELECT user_id, NOW(), NOW() + (5 * interval '1 minute')
 FROM UNNEST($1::uuid[]) as user_id
       ",
       &inactive_user_ids
