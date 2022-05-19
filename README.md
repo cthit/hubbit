@@ -4,7 +4,7 @@
 
 Steps for settings up the project
 
-1. Copy `.env.example` to `.env` and fill in with relevant information (see comments in the file)
+1. Copy `.env.example` to `.env` and fill in with relevant information (default should be fine for dev)
 2. Run the docker compose file (`docker compose up`)
 3. Run `make setup` to initialize some data into hubbit and gamma. It might be a good idea to wait for the containers to start before running the setup, around 30 seconds should be enough
 
