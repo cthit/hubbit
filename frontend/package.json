@@ -5,6 +5,12 @@
   "main": "dist/index.js",
   "repository": "https://github.com/cthit/hubbit",
   "author": "Rasmus Rosengren <rasmus.rosengren@protonmail.com>",
+  "contributors": [
+    {
+      "name": "Vidar Magnusson",
+      "email": "hubbit-dev@vidarmagnusson.com"
+    }
+  ],
   "license": "MIT",
   "private": true,
   "scripts": {
