@@ -30,6 +30,10 @@ export function dateDiffToString(dateDiff: DateDiff) {
     : `${dateDiff.secondsSince} second${dateDiff.secondsSince === 1 ? '' : 's'}`;
 }
 
+export function isAfterNow(date: Date): boolean {
+  return date >= now;
+}
+
 export function timeSince(date: Date): DateDiff {
   return timeBetween(date, now);
 }

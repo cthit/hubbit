@@ -7,6 +7,7 @@ import { UserStatsFragment, UserStatsQuery } from '../../__generated__/graphql';
 import {
   dateDiffToAgoString,
   dateDiffToString,
+  isAfterNow,
   prettyFromSeconds,
   secondsToMinutesOrHours,
   timeBetween,
@@ -57,21 +58,31 @@ const UserStatsCards = ({ user }: Props) => {
 };
 
 function getLastSessionText(recentSessions: UserStatsQuery['user']['recentSessions']): any {
-  if (recentSessions.length === 0) {
+  if (!recentSessions || recentSessions.length === 0) {
     return 'Never been seen in the Hubb! :o';
   }
 
   const lastSession = recentSessions[0];
   const lastSessionStartTime = new Date(lastSession.startTime);
-  const lastSessionEndTime = new Date(lastSession.endTime);
+  let lastSessionEndTime = new Date(lastSession.endTime);
+  const isInHub = isAfterNow(lastSessionEndTime);
+  if (isInHub) {
+    lastSessionEndTime = new Date(Date.now());
+  }
   const timeSinceStr = dateDiffToAgoString(timeSince(lastSessionEndTime));
   const dateStr = dateFormat(lastSessionEndTime, 'd mmm HH:MM');
 
   return (
     <>
-      {timeSinceStr}
-      <br />
-      {dateStr}
+      {isInHub ? (
+        <>{'Just now'}</>
+      ) : (
+        <>
+          {timeSinceStr}
+          <br />
+          {dateStr}
+        </>
+      )}
       <br />
       {`For about ${dateDiffToString(timeBetween(lastSessionStartTime, lastSessionEndTime))}`}
     </>
