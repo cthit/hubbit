@@ -2,29 +2,39 @@ type ActiveSession {
 	user: User!
 	startTime: DateTime!
 }
+
+
 """
 Implement the DateTime<Utc> scalar
 
 The input/output is a string in RFC3339 format.
 """
 scalar DateTime
+
 type Device {
 	id: UUID!
 	address: String!
 	name: String!
 	isActive: Boolean!
 }
+
 input DeviceInput {
 	address: String!
 	name: String!
 }
+
+
 type Group {
 	name: String!
 	prettyName: String!
 }
+
+
+
 type MutationRoot {
 	setDevices(data: SetDevicesInput!): [Device!]!
 }
+
 enum Period {
 	SUMMER
 	LP1
@@ -32,6 +42,7 @@ enum Period {
 	LP3
 	LP4
 }
+
 type QueryRoot {
 	currentSessions: [ActiveSession!]!
 	statsAlltime: [Stat!]!
@@ -43,71 +54,98 @@ type QueryRoot {
 	me: User!
 	user(input: UserUniqueInput!): User!
 }
+
 type Session {
 	startTime: DateTime!
 	endTime: DateTime!
 }
+
 input SetDevicesInput {
 	devices: [DeviceInput!]!
 }
+
 type Stat {
 	user: User!
 	durationSeconds: Int!
 	currentPosition: Int!
 	prevPosition: Int
 }
+
 input StatsDayInput {
 	year: Int!
 	month: Int!
 	day: Int!
 }
+
 type StatsDayPayload {
 	stats: [Stat!]!
 	curr: YearMonthDay!
 	next: YearMonthDay!
 	prev: YearMonthDay!
 }
+
 input StatsMonthInput {
 	year: Int!
 	month: Int!
 }
+
 type StatsMonthPayload {
 	stats: [Stat!]!
 	curr: YearMonth!
 	next: YearMonth!
 	prev: YearMonth!
 }
+
 input StatsStudyPeriodInput {
 	year: Int!
 	period: Period!
 }
+
 type StatsStudyPeriodPayload {
 	stats: [Stat!]!
 	year: Int!
 	period: Period!
 }
+
 input StatsStudyYearInput {
 	year: Int!
 }
+
 type StatsStudyYearPayload {
 	stats: [Stat!]!
 	year: Int!
 }
+
 input StatsWeekInput {
 	year: Int!
 	week: Int!
 }
+
 type StatsWeekPayload {
 	stats: [Stat!]!
 	curr: YearWeek!
 	next: YearWeek!
 	prev: YearWeek!
 }
+
+
 type SubscriptionRoot {
 	userJoin: ActiveSession!
 	userLeave: User!
 }
+
+"""
+A UUID is a unique 128-bit number, stored as 16 octets. UUIDs are parsed as
+Strings within GraphQL. UUIDs are used to assign unique identifiers to
+entities without requiring a central allocating authority.
+
+# References
+
+* [Wikipedia: Universally Unique Identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)
+* [RFC4122: A Universally Unique IDentifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)
+"""
 scalar UUID
+
 type User {
 	id: UUID!
 	cid: String!
@@ -117,7 +155,7 @@ type User {
 	avatarUrl: String!
 	groups: [Group!]!
 	hourStats: [Int!]!
-	recentSessions: [Session!]!
+	recentSessions: [Session!]
 	longestSession: Session
 	totalTimeSeconds: Int!
 	averageTimePerDay: Int!
@@ -126,23 +164,28 @@ type User {
 	currAlltimePosition: Int
 	currStudyYearPosition: Int
 }
+
 input UserUniqueInput {
 	id: UUID
 	cid: String
 }
+
 type YearMonth {
 	year: Int!
 	month: Int!
 }
+
 type YearMonthDay {
 	year: Int!
 	month: Int!
 	day: Int!
 }
+
 type YearWeek {
 	year: Int!
 	week: Int!
 }
+
 schema {
 	query: QueryRoot
 	mutation: MutationRoot
