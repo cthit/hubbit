@@ -36,6 +36,9 @@ const CURRENT_SESSIONS_QUERY = gql`
     currentSessions {
       ...CurrentSession
     }
+    me {
+      cid
+    }
   }
 
   ${CURRENT_SESSION_FRAGMENT}
@@ -94,7 +97,7 @@ const Home: NextPage<PageProps<CurrentSessionsQuery>> = ({ data }) => {
         <title>{createTitle('Who is in the Hubb?')}</title>
       </Head>
       <div className={styles.sessionsContainer}>
-        <ActiveUserList sessions={sessions} />
+        <ActiveUserList sessions={sessions} loggedInUser={data.me.cid} />
         <ActiveGroupList sessions={sessions} />
       </div>
     </>
