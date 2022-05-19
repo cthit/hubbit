@@ -51,13 +51,17 @@ impl StatsService {
       .with_month(1)
       .expect("Could not set month to 1");
 
-    *earliest_date_lock = Some(earliest_date);
+    // Only save the earliest date if there are any sessions, otherwise it
+    // saves the earliest date as the MAX_DATETIME, which screws everything
+    if !sessions.is_empty() {
+      *earliest_date_lock = Some(earliest_date);
 
-    let redis_pool = self.redis_pool.clone();
-    let earliest_date_clone = earliest_date;
-    tokio::spawn(async move {
-      redis_set(redis_pool, "earliest_date".to_owned(), earliest_date_clone).await
-    });
+      let redis_pool = self.redis_pool.clone();
+      let earliest_date_clone = earliest_date;
+      tokio::spawn(async move {
+        redis_set(redis_pool, "earliest_date".to_owned(), earliest_date_clone).await
+      });
+    }
 
     Ok(earliest_date)
   }
