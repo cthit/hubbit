@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "hubbIT frontend",
   "main": "dist/index.js",
-  "repository": "https://github.com/rosengrenen/hubbit2",
-  "author": "Rasmus Rosengren <rasmus.rosengren@pm.me>",
+  "repository": "https://github.com/cthit/hubbit",
+  "author": "Rasmus Rosengren <rasmus.rosengren@protonmail.com>",
   "license": "MIT",
   "private": true,
   "scripts": {

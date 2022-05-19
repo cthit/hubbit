@@ -1,6 +1,6 @@
-# hubbit2
+# hubbit
 
-## Setup project (DEV)
+## Development setup
 
 Steps for settings up the project
 
