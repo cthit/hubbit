@@ -1,2 +1,0 @@
--- Setup hubbit mock data
--- 
