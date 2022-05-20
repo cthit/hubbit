@@ -58,7 +58,7 @@ const UserStatsCards = ({ user }: Props) => {
 };
 
 function getLastSessionText(recentSessions: UserStatsQuery['user']['recentSessions']): any {
-  if (!recentSessions || recentSessions.length === 0) {
+  if (recentSessions.length === 0) {
     return 'Never been seen in the Hubb! :o';
   }
 

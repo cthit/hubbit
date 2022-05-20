@@ -150,16 +150,10 @@ impl User {
     )
   }
 
-  async fn recent_sessions(
-    &self,
-    context: &Context<'_>,
-  ) -> HubbitSchemaResult<Option<Vec<Session>>> {
+  async fn recent_sessions(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Session>> {
     let user = context.data_unchecked::<GammaUser>();
-    if user.id != self.id {
-      return Ok(None);
-    }
-
     let user_session_repo = context.data_unchecked::<UserSessionRepository>();
+
     let sessions = user_session_repo
       .get_range_for_user(*MIN_DATETIME, *MAX_DATETIME, self.id)
       .await
@@ -167,16 +161,17 @@ impl User {
         error!("[Schema error] {:?}", e);
         HubbitSchemaError::InternalError
       })?;
-    Ok(Some(
+    let sessions_limit = if user.id == self.id { 10 } else { 1 };
+    Ok(
       sessions
         .iter()
         .map(|session| Session {
           start_time: session.start_time,
           end_time: session.end_time,
         })
-        .take(10)
+        .take(sessions_limit)
         .collect(),
-    ))
+    )
   }
 
   async fn longest_session(&self, context: &Context<'_>) -> HubbitSchemaResult<Option<Session>> {
