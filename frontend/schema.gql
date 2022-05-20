@@ -155,7 +155,7 @@ type User {
 	avatarUrl: String!
 	groups: [Group!]!
 	hourStats: [Int!]!
-	recentSessions: [Session!]
+	recentSessions: [Session!]!
 	longestSession: Session
 	totalTimeSeconds: Int!
 	averageTimePerDay: Int!

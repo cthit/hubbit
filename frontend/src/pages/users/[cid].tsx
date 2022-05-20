@@ -12,6 +12,7 @@ import UserRecentSessionsList, {
   USER_RECENT_SESSIONS_FRAGMENT,
 } from '../../components/user-last-sessions-list/UserRecentSessionsList';
 import UserStatsCards, { USER_STATS_FRAGMENT } from '../../components/user-stats-cards/UserStatsCards';
+import { useAuth } from '../../contexts/auth';
 import { createTitle, defaultGetServerSideProps, formatNick, PageProps } from '../../util';
 
 import styles from './[cid].module.scss';
@@ -39,6 +40,8 @@ const USER_STATS_QUERY = gql`
 `;
 
 const UserStats: NextPage<PageProps<UserStatsQuery>> = ({ data }) => {
+  const { user } = useAuth();
+
   if (!data) {
     return <Error />;
   }
@@ -60,7 +63,7 @@ const UserStats: NextPage<PageProps<UserStatsQuery>> = ({ data }) => {
         <div className={styles.showSection}>
           <UserStatsCards user={data.user} />
           <HoursInHubbGraph user={data.user} />
-          {data.user.recentSessions && <UserRecentSessionsList recentSessions={data.user.recentSessions} />}
+          {data.user.cid === user.cid && <UserRecentSessionsList recentSessions={data.user.recentSessions} />}
         </div>
       </div>
     </>
