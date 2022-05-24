@@ -133,6 +133,8 @@ export const formatNick = (cid: string, nick: string) => {
       return `👹 ${nick} 👉👈`;
     case 'andrason':
       return `${nick}🧊`;
+    case 'nilsosc':
+      return `✂️`;
     default:
       return nick;
   }
