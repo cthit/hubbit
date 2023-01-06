@@ -130,3 +130,20 @@ tr#\38 bit {
     font-size: 1em;
   }
 }
+
+tr#kandidatmiddagen {
+   background: url('/group-images/middag.png');
+
+   th {
+      opacity: 0;
+   }
+}
+
+tr#flashit {
+   background: url('/group-images/flashit');
+
+   th {
+      color:white;
+      text-align:end;
+   }
+}
