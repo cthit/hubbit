@@ -132,11 +132,13 @@ tr#\38 bit {
 }
 
 tr#kandidatmiddagen {
-   background: url('/group-images/middag.png');
+  background: url('/group-images/middag.png');
+  background-color: #44aedb;
+}
 
-   th {
-      opacity: 0;
-   }
+tr#kandidatmiddagen th {
+  opacity: 0;
+}
 }
 
 tr#flashit {
