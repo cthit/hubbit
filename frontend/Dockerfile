@@ -1,4 +1,4 @@
-FROM node:lts-alpine as DEPS
+FROM node:16-alpine as DEPS
 
 WORKDIR /app
 COPY package.json yarn.lock ./
