@@ -1,4 +1,4 @@
-FROM node:lts-alpine as DEPS
+FROM node:16-alpine as DEPS
 
 WORKDIR /app
 COPY package.json yarn.lock ./
@@ -14,7 +14,7 @@ RUN yarn install --frozen-lockfile
 
 
 
-FROM node:lts-alpine as BUILD_IMAGE
+FROM node:16-alpine as BUILD_IMAGE
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offlin
 
 
 
-FROM node:lts-alpine
+FROM node:16-alpine
 
 ENV NODE_ENV production
 
