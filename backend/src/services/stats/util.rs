@@ -74,7 +74,7 @@ pub fn year_time_bounds(year: i32) -> (DateTime<Local>, DateTime<Local>) {
 }
 
 pub fn month_time_bounds(year: i32, month: u32) -> (DateTime<Local>, DateTime<Local>) {
-  let start_time = Local.ymd(year, month as u32, 1).and_hms(0, 0, 0);
+  let start_time = Local.ymd(year, month, 1).and_hms(0, 0, 0);
   let end_time = if month == 12 {
     Local.ymd(year + 1, 1, 1).and_hms(23, 59, 59)
   } else {
@@ -90,11 +90,11 @@ pub fn day_time_bounds(year: i32, month: u32, day: u32) -> (DateTime<Local>, Dat
 }
 
 pub fn month_date_bounds(year: i32, month: u32) -> (NaiveDate, NaiveDate) {
-  let start_time = Local.ymd(year, month as u32, 1).naive_local();
+  let start_time = Local.ymd(year, month, 1).naive_local();
   let end_time = if month == 12 {
     Local.ymd(year + 1, 1, 1).and_hms(23, 59, 59)
   } else {
-    Local.ymd(year, month as u32 + 1, 1).and_hms(0, 0, 0)
+    Local.ymd(year, month + 1, 1).and_hms(0, 0, 0)
   } - Duration::seconds(1);
   let end_time = end_time.date().naive_local();
   (start_time, end_time)
@@ -108,6 +108,6 @@ pub fn week_date_bounds(year: i32, week: u32) -> (NaiveDate, NaiveDate) {
 
 pub fn day_date_bounds(year: i32, month: u32, day: u32) -> (NaiveDate, NaiveDate) {
   let start_time = Local.ymd(year, month, day).naive_local();
-  let end_time = Local.ymd(year, month as u32, day as u32).naive_local();
+  let end_time = Local.ymd(year, month, day).naive_local();
   (start_time, end_time)
 }
