@@ -258,7 +258,7 @@ impl StatsQuery {
       (input.year, input.month)
     } else {
       let now = Utc::now();
-      (now.year() as i32, now.month() as i32)
+      (now.year(), now.month() as i32)
     };
 
     let stats_service = context.data_unchecked::<StatsService>();
@@ -316,7 +316,7 @@ impl StatsQuery {
       (input.year, input.week)
     } else {
       let now = Utc::now();
-      (now.year() as i32, now.iso_week().week() as i32)
+      (now.year(), now.iso_week().week() as i32)
     };
 
     let stats_service = context.data_unchecked::<StatsService>();
@@ -334,7 +334,7 @@ impl StatsQuery {
 
     let previous_stats = if context.look_ahead().field("prevPosition").exists() {
       stats_service
-        .get_week(prev_week.year(), prev_week.iso_week().week() as u32)
+        .get_week(prev_week.year(), prev_week.iso_week().week())
         .await
         .ok()
     } else {
@@ -368,7 +368,7 @@ impl StatsQuery {
       (input.year, input.month, input.day)
     } else {
       let now = Utc::now();
-      (now.year() as i32, now.month() as i32, now.day() as i32)
+      (now.year(), now.month() as i32, now.day() as i32)
     };
 
     let stats_service = context.data_unchecked::<StatsService>();
@@ -454,7 +454,7 @@ fn sort_and_map_stats(
     HashMap::new()
   };
 
-  let mut stats = stats.into_iter().map(|(_, stat)| stat).collect::<Vec<_>>();
+  let mut stats = stats.into_values().collect::<Vec<_>>();
   stats.sort_by_key(|stat| -stat.duration_ms);
   stats
     .iter()
@@ -463,7 +463,7 @@ fn sort_and_map_stats(
       user: User { id: stat.user_id },
       duration_seconds: stat.duration_ms / 1000,
       current_position: index as i32 + 1,
-      prev_position: prev_positions.get(&stat.user_id).map(|&v| v as i32),
+      prev_position: prev_positions.get(&stat.user_id).copied(),
     })
     .collect()
 }
