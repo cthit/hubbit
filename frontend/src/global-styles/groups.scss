@@ -8,6 +8,14 @@ tr#hookit {
   }
 }
 
+tr#revisorer {
+  background: url('/group-images/revisorer.png');
+
+  th {
+    opacity: 0;
+  }
+}
+
 tr#engsmyre {
   background-image: url('/group-images/gib_cat.jpg');
   background-repeat: no-repeat;
