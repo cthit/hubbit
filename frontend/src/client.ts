@@ -2,8 +2,15 @@ import { createClient as createWSClient } from 'graphql-ws';
 import { createClient as createUrqlClient, defaultExchanges, subscriptionExchange } from 'urql';
 
 export const clientSideClient = () => {
+  // Default to secure websockets, and only downgrade if page is unsecure too
+  // e.g. during development
+  let websocketProtocol = 'wss';
+  if (window.location.protocol === 'http:') {
+    websocketProtocol = 'ws';
+  }
+
   const wsClient = createWSClient({
-    url: `ws://${window.location.host}/api/graphql`,
+    url: `${websocketProtocol}://${window.location.host}/api/graphql`,
   });
 
   return createUrqlClient({
