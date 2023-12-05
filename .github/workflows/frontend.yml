@@ -50,6 +50,10 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+
     needs:
       - build
       - test
@@ -65,4 +69,5 @@ jobs:
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
-          push: false
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/cthit/hubbit-frontend:latest
