@@ -80,6 +80,7 @@ tr#digit {
     color: white;
   }
 }
+
 tr#styrit {
   background: url('/group-images/styritsvagn.jpg');
 
@@ -88,6 +89,7 @@ tr#styrit {
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
 }
+
 tr#drawit {
   background: url('/group-images/drawit.png');
 
@@ -95,6 +97,7 @@ tr#drawit {
     color: white;
   }
 }
+
 tr#fritid {
   background: url('/group-images/fritid.png');
 
@@ -102,6 +105,7 @@ tr#fritid {
     color: white;
   }
 }
+
 tr#laggit {
   background: url('/group-images/laggit.png');
 
@@ -109,6 +113,7 @@ tr#laggit {
     color: white;
   }
 }
+
 tr#valberedningen {
   background: url('/group-images/valleb.png');
 
@@ -148,12 +153,12 @@ tr#kandidatmiddagen th {
 
 
 tr#flashit {
-   background: url('/group-images/flashit.png');
+  background: url('/group-images/flashit.png');
 
-   th {
-      color:white;
-      text-align:end;
-   }
+  th {
+    color: black;
+    text-align: end;
+  }
 }
 
 tr#cloudlords {
