@@ -1,4 +1,4 @@
-FROM rust:1.60
+FROM rust:1.70
 
 ENV TZ=Europe/Stockholm
 ENV DEBIAN_FRONTEND=noninteractive
