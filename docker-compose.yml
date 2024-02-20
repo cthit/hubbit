@@ -58,7 +58,7 @@ services:
       - ${ADMINER_PORT}:8080
 
   redis-ui:
-    image: patrikx3/p3x-redis-ui:2021.4.162
+    image: patrikx3/p3x-redis-ui:2023.10.243
     ports:
       - ${REDIS_UI_PORT}:7843
     volumes:
