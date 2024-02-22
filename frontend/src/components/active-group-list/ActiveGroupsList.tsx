@@ -48,7 +48,7 @@ const ActiveGroupList = ({ sessions }: Props) => {
       }
     });
   });
-  const groups = Array.from(groupsMap)
+  let groups = Array.from(groupsMap)
     .map(([group, groupUsers]) => {
       return {
         name: group,
@@ -57,6 +57,8 @@ const ActiveGroupList = ({ sessions }: Props) => {
       };
     })
     .sort((left, right) => left.name.localeCompare(right.name));
+  /* Move hookit to the bottom, this is an ugly solution and should be fixed by someone who is better att JS than I am */
+  groups = [...groups.filter(group => group.name !== 'hookit'), ...groups.filter(group => group.name === 'hookit')];
 
   return (
     <div className={styles.activeGroupsContainer}>
