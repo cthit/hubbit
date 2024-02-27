@@ -8,7 +8,6 @@ use actix_web::{
   App, HttpServer,
 };
 use chrono::{Datelike, Duration, Local};
-use dotenv::dotenv;
 use log::{error, info, warn};
 use mobc::Pool;
 use mobc_redis::{redis::Client, RedisConnectionManager};
@@ -31,7 +30,7 @@ use backend::{
 
 #[tokio::main]
 async fn main() -> HubbitResult<()> {
-  dotenv().ok();
+  dotenvy::dotenv().ok();
   env_logger::init();
 
   let config = Config::from_env()?;

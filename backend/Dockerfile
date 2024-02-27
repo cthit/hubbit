@@ -10,7 +10,7 @@ RUN apt update && apt install -y tzdata
 WORKDIR /app
 
 # Install required tools
-RUN cargo install sqlx-cli --version 0.5.13
+RUN cargo install sqlx-cli --version 0.7.3
 RUN cargo install strip_cargo_version
 
 # Install build-target for static linking

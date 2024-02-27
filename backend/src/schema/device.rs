@@ -63,7 +63,7 @@ pub struct DeviceMutation;
 
 #[Object]
 impl DeviceMutation {
-  #[graphql(guard = "AuthGuard::default()")]
+  #[graphql(guard = AuthGuard)]
   pub async fn set_devices(
     &self,
     context: &Context<'_>,
