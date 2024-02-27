@@ -33,7 +33,7 @@ pub struct Group {
 
 #[Object]
 impl UserQuery {
-  #[graphql(guard = "AuthGuard::default()")]
+  #[graphql(guard = AuthGuard)]
   pub async fn user(
     &self,
     context: &Context<'_>,
@@ -234,15 +234,15 @@ impl User {
     });
 
     let all_time_seconds = duration_ms / 1000;
-    let first_day = match user_session_repo
+    let Some(first_day) = user_session_repo
       .get_first_entry_day(self.id)
       .await
       .map_err(|e| {
         error!("[Schema error] {:?}", e);
         HubbitSchemaError::InternalError
-      })? {
-      Some(first_day) => first_day,
-      None => return Ok(0),
+      })?
+    else {
+      return Ok(0);
     };
 
     let today = Local::now();

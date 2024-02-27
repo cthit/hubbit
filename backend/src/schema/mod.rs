@@ -104,7 +104,6 @@ impl Display for HubbitSchemaError {
   }
 }
 
-#[derive(Default)]
 pub struct AuthGuard;
 
 impl Guard for AuthGuard {
