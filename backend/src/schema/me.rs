@@ -9,7 +9,7 @@ pub struct MeQuery;
 
 #[Object]
 impl MeQuery {
-  #[graphql(guard = "AuthGuard::default()")]
+  #[graphql(guard = AuthGuard)]
   pub async fn me(&self, context: &Context<'_>) -> User {
     let user = context.data_unchecked::<GammaUser>();
     User { id: user.id }

@@ -12,7 +12,7 @@ pub struct SessionQuery;
 
 #[Object]
 impl SessionQuery {
-  #[graphql(guard = "AuthGuard::default()")]
+  #[graphql(guard = AuthGuard)]
   pub async fn current_sessions(
     &self,
     context: &Context<'_>,
