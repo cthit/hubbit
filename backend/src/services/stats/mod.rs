@@ -68,7 +68,7 @@ impl StatsService {
   pub async fn get_alltime(&self) -> HubbitResult<Stats> {
     let now = Local::now();
     let start_date = self.get_earliest_date().await?;
-    let end_date = now.date().naive_local();
+    let end_date = now.date_naive();
     self.get_range(start_date, end_date).await
   }
 

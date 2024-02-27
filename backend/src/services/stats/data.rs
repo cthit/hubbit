@@ -44,8 +44,7 @@ impl StatsService {
       .fold(*MAX_DATETIME, |prev, cur| {
         prev.min(cur.start_time.with_timezone(&Local))
       })
-      .date()
-      .naive_local()
+      .date_naive()
       .with_day(1)
       .expect("Could not set day to 1")
       .with_month(1)

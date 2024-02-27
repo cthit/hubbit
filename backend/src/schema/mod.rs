@@ -7,7 +7,6 @@ pub mod user;
 use std::fmt::Display;
 
 use async_graphql::{Context, ErrorExtensions, Guard, MergedObject, Result, Schema, Subscription};
-use async_trait::async_trait;
 use futures::StreamExt;
 
 use crate::{
@@ -108,7 +107,6 @@ impl Display for HubbitSchemaError {
 #[derive(Default)]
 pub struct AuthGuard;
 
-#[async_trait]
 impl Guard for AuthGuard {
   async fn check(&self, context: &Context<'_>) -> Result<()> {
     if context.data_opt::<GammaUser>().is_some() {

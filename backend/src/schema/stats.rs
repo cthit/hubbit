@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use async_graphql::{Context, InputObject, Object, SimpleObject};
-use chrono::{Datelike, Duration, TimeZone, Utc, Weekday};
+use chrono::{Datelike, Duration, NaiveDate, Utc, Weekday};
 use log::error;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -328,7 +328,7 @@ impl StatsQuery {
         HubbitSchemaError::InternalError
       })?;
 
-    let curr_week = Utc.isoywd(year, week as u32, Weekday::Mon);
+    let curr_week = NaiveDate::from_isoywd_opt(year, week as u32, Weekday::Mon).unwrap();
     let prev_week = curr_week.to_owned() - Duration::weeks(1);
     let next_week = curr_week + Duration::weeks(1);
 
@@ -380,7 +380,7 @@ impl StatsQuery {
         HubbitSchemaError::InternalError
       })?;
 
-    let curr_day = Utc.ymd(year, month as u32, day as u32);
+    let curr_day = NaiveDate::from_ymd_opt(year, month as u32, day as u32).unwrap();
     let prev_day = curr_day - Duration::days(1);
     let next_day = curr_day + Duration::days(1);
 
