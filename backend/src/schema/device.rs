@@ -67,8 +67,9 @@ impl DeviceMutation {
   pub async fn set_devices(
     &self,
     context: &Context<'_>,
-    mut data: SetDevicesInput,
+    data: SetDevicesInput,
   ) -> HubbitSchemaResult<Vec<Device>> {
+    let mut data = data;
     for device in data.devices.iter_mut() {
       device.address = device.address.to_uppercase();
       validate_mac_addr(&device.address)?;

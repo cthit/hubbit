@@ -19,9 +19,9 @@ impl StatsService {
     mut start_date: NaiveDate,
     mut end_date: NaiveDate,
   ) -> HubbitResult<Stats> {
-    let now = Local::now();
-    if end_date.and_hms(0, 0, 0) > now.naive_local() {
-      end_date = now.date().naive_local();
+    let now = Local::now().date_naive();
+    if end_date > now {
+      end_date = now;
     }
 
     let earliest_date = self.get_earliest_date().await?;
@@ -81,12 +81,12 @@ impl StatsService {
   }
 
   async fn get_day_unchecked(&self, year: i32, month: u32, day: u32) -> HubbitResult<Stats> {
-    let now = Local::now();
-    let requested_date = Local.ymd(year, month, day);
+    let now = Local::now().date_naive();
+    let requested_date = NaiveDate::from_ymd_opt(year, month, day).unwrap();
 
     // Only check redis if not current day
     let key = format!("day:({},{},{})", year, month, day);
-    if requested_date != now.date() {
+    if requested_date != now {
       if let Ok(stats) = redis_get::<Stats>(self.redis_pool.clone(), &key).await {
         return Ok(stats);
       }
@@ -96,7 +96,7 @@ impl StatsService {
     let stats = self.get_range_fresh(start_time, end_time).await?;
 
     // Only save to redis if current day
-    if requested_date != now.date() {
+    if requested_date != now {
       let stats = stats.clone();
       let redis_pool = self.redis_pool.clone();
       tokio::spawn(async move { redis_set(redis_pool, key, stats).await });
@@ -140,13 +140,14 @@ impl StatsService {
 
 fn last_day_of_month(year: i32, month: u32) -> u32 {
   let first_day_of_next_month = if month == 12 {
-    Local.ymd(year + 1, 1, 1).and_hms(0, 0, 0)
+    Local.with_ymd_and_hms(year + 1, 1, 1, 0, 0, 0)
   } else {
-    Local.ymd(year, month + 1, 1).and_hms(0, 0, 0)
-  };
+    Local.with_ymd_and_hms(year, month + 1, 1, 0, 0, 0)
+  }
+  .unwrap();
 
   let last_day_of_month = first_day_of_next_month - Duration::seconds(1);
-  last_day_of_month.date().naive_local().day()
+  last_day_of_month.date_naive().day()
 }
 
 fn leading_days(start_date: NaiveDate, end_date: NaiveDate) -> Vec<(i32, u32, u32)> {

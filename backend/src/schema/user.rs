@@ -257,8 +257,12 @@ impl User {
 
   async fn time_today_seconds(&self, context: &Context<'_>) -> HubbitSchemaResult<i64> {
     let user_session_repo = context.data_unchecked::<UserSessionRepository>();
-    let today = Local::now().date();
-    let today_start = today.and_hms(0, 0, 0);
+    let today = Local::now().date_naive();
+    let today_start = today
+      .and_hms_opt(0, 0, 0)
+      .unwrap()
+      .and_local_timezone(Local)
+      .unwrap();
     let today_end = (today_start + Duration::days(1)) - Duration::seconds(1);
 
     let sessions = user_session_repo
@@ -270,12 +274,12 @@ impl User {
       })?;
 
     let duration_ms = sessions.iter().fold(0, |prev, curr| {
-      let start_time = if curr.start_time.date().eq(&today) {
+      let start_time = if curr.start_time.date_naive().eq(&today) {
         DateTime::<Local>::from(curr.start_time)
       } else {
         today_start
       };
-      let end_time = if curr.end_time.date().eq(&today) {
+      let end_time = if curr.end_time.date_naive().eq(&today) {
         DateTime::<Local>::from(curr.end_time)
       } else {
         today_end
