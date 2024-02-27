@@ -12,31 +12,31 @@ services:
       - ./frontend:/app
       - /app/node_modules
 
-  hubbit-backend:
-    build:
-      context: backend
-      dockerfile: dev.Dockerfile
-    environment:
-      PORT: 8080
-      DATABASE_URL: postgres://hubbit:hubbit@hubbit-db/hubbit
-      REDIS_URL: redis://hubbit-redis:6379
-      GAMMA_PUBLIC_URL: http://localhost:8081
-      GAMMA_INTERNAL_URL: http://gamma-backend:3000
-      GAMMA_API_KEY: hubbit
-      GAMMA_CLIENT_ID: hubbit
-      GAMMA_CLIENT_SECRET: hubbit
-      COOKIE_SECRET: QkAbEaSuT5UNDthgnScWhQwET7HzHUzFPhrS62xwYUwvtbx2ihmQanSSML2Ky63r
-      COOKIE_SECURE: "false"
-      RUST_LOG: ${BACKEND_LOG_LEVEL}
-      GROUP_WHITELIST: ${GROUP_WHITELIST}
-    ports:
-      - ${BACKEND_PORT}:8080
-    volumes:
-      - ./backend:/app
-      - /app/target
-    depends_on:
-      - "hubbit-db"
-    command: ["./wait-for-postgres.sh", "hubbit-db", "${PG_PASSWORD}", "${PG_USERNAME}", "sh", "-c", "cargo sqlx migrate run && cargo watch -x run"]
+  # hubbit-backend:
+  #   build:
+  #     context: backend
+  #     dockerfile: dev.Dockerfile
+  #   environment:
+  #     PORT: 8080
+  #     DATABASE_URL: postgres://hubbit:hubbit@hubbit-db/hubbit
+  #     REDIS_URL: redis://hubbit-redis:6379
+  #     GAMMA_PUBLIC_URL: http://localhost:8081
+  #     GAMMA_INTERNAL_URL: http://gamma-backend:3000
+  #     GAMMA_API_KEY: hubbit
+  #     GAMMA_CLIENT_ID: hubbit
+  #     GAMMA_CLIENT_SECRET: hubbit
+  #     COOKIE_SECRET: QkAbEaSuT5UNDthgnScWhQwET7HzHUzFPhrS62xwYUwvtbx2ihmQanSSML2Ky63r
+  #     COOKIE_SECURE: "false"
+  #     RUST_LOG: ${BACKEND_LOG_LEVEL}
+  #     GROUP_WHITELIST: ${GROUP_WHITELIST}
+  #   ports:
+  #     - ${BACKEND_PORT}:8080
+  #   volumes:
+  #     - ./backend:/app
+  #     - /app/target
+  #   depends_on:
+  #     - "hubbit-db"
+  #   command: ["./wait-for-postgres.sh", "hubbit-db", "${PG_PASSWORD}", "${PG_USERNAME}", "sh", "-c", "cargo sqlx migrate run && cargo watch -x run"]
 
   hubbit-db:
     image: postgres:13.2
