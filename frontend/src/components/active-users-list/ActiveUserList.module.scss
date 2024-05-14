@@ -1,12 +1,12 @@
 @import 'src/global-styles/vars';
 
 .activeSmurfsWrapper {
-  padding: 28px 0;
+  padding: 28px;
   margin: 0 0 1em;
   color: #666;
   display: flex;
   justify-content: center;
-  min-width: 55%;
+  min-width: 45%;
 
   @media (max-width: 810px) {
     width: 100%;
