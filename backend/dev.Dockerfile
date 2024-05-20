@@ -2,7 +2,8 @@ FROM rust:1.76
 
 ENV TZ=Europe/Stockholm
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -y tzdata postgresql-13
+
+RUN apt update && apt install -y tzdata postgresql
 
 WORKDIR /app
 
@@ -13,3 +14,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 CMD cargo sqlx migrate run && cargo watch -x run
+
