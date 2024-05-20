@@ -13,13 +13,9 @@ interface Props {
 export const StatsTimespanSelect = ({ current, prev, next }: Props) => {
   return (
     <div className={styles.row}>
-      <Link href={prev}>
-        <a>Prev</a>
-      </Link>
+      <Link href={prev}>Prev</Link>
       <div className={styles.currentText}>{current}</div>
-      <Link href={next}>
-        <a>Next</a>
-      </Link>
+      <Link href={next}>Next</Link>
     </div>
   );
 };

@@ -53,13 +53,9 @@ const UserStats: NextPage<PageProps<UserStatsQuery>> = ({ data }) => {
       </Head>
       <div className={styles.showSection}>
         <h1>{data.user.nick}</h1>
-        <Link href={`/stats/study-year#${data.user.cid}`}>
-          <a>Study Year Position: {data.user.currStudyYearPosition}</a>
-        </Link>
+        <Link href={`/stats/study-year#${data.user.cid}`}>Study Year Position: {data.user.currStudyYearPosition}</Link>
         <br />
-        <Link href={`/stats/all-time#${data.user.cid}`}>
-          <a>All Time Position: {data.user.currAlltimePosition}</a>
-        </Link>
+        <Link href={`/stats/all-time#${data.user.cid}`}>All Time Position: {data.user.currAlltimePosition}</Link>
         <div className={styles.showSection}>
           <UserStatsCards user={data.user} />
           <HoursInHubbGraph user={data.user} />
