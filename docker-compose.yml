@@ -2,14 +2,14 @@ version: "3"
 services:
   hubbit-frontend:
     build:
-      context: frontend-new
+      context: frontend
       dockerfile: dev.Dockerfile
     environment:
       BACKEND_ADDRESS: http://hubbit-backend:8080
     ports:
       - ${FRONTEND_PORT}:3000
     volumes:
-      - ./frontend-new:/app
+      - ./frontend:/app
       - /app/node_modules
 
   hubbit-backend:

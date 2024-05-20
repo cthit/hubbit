@@ -2,6 +2,7 @@ import { Client, CombinedError } from '@urql/core';
 import { DocumentNode } from 'graphql';
 import { GetServerSideProps, GetServerSidePropsContext, Redirect } from 'next';
 import { ParsedUrlQuery } from 'querystring';
+import { AnyVariables } from 'urql';
 
 import { serverSideClient } from './client';
 
@@ -55,7 +56,7 @@ export interface PageProps<T> {
 export const defaultGetServerSideProps = <
   Result,
   // eslint-disable-next-line @typescript-eslint/ban-types
-  Variables extends object = {},
+  Variables extends AnyVariables = undefined,
   Params extends ParsedUrlQuery = ParsedUrlQuery,
 >(
   query: DocumentNode,
@@ -74,8 +75,9 @@ export const defaultGetServerSideProps = <
         };
       }
     }
-    const variables = (inputCallback && inputCallback(context)) || undefined;
+    const variables: Variables = ((inputCallback && inputCallback(context)) || undefined) as Variables;
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     const { data, error } = await client.query<Result, Variables>(query, variables).toPromise();
 
     let redirect: Redirect | undefined = undefined;

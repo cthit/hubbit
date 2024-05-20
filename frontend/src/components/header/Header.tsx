@@ -28,24 +28,16 @@ const Header = () => {
       <nav>
         <ul className={styles.menu}>
           <li className={asPath === DEVICES_ENDPOINT ? styles.active : ''}>
-            <Link href={DEVICES_ENDPOINT}>
-              <a>DEVICES</a>
-            </Link>
+            <Link href={DEVICES_ENDPOINT}>DEVICES</Link>
           </li>
           <li className={asPath === MAIN_ENDPOINT ? styles.active : ''}>
-            <Link href={MAIN_ENDPOINT}>
-              <a>SMURFS IN THE HUBB</a>
-            </Link>
+            <Link href={MAIN_ENDPOINT}>SMURFS IN THE HUBB</Link>
           </li>
           <li className={asPath.startsWith(STATS_BASE_ENDPOINT) ? styles.active : ''}>
-            <Link href={`${STATS_BASE_ENDPOINT}study-year`}>
-              <a>STATS</a>
-            </Link>
+            <Link href={`${STATS_BASE_ENDPOINT}study-year`}>STATS</Link>
           </li>
           <li className={asPath.startsWith(MY_STATS_URL) ? styles.active : ''}>
-            <Link href={MY_STATS_URL}>
-              <a>MY STATS</a>
-            </Link>
+            <Link href={MY_STATS_URL}>MY STATS</Link>
           </li>
         </ul>
       </nav>

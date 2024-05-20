@@ -89,9 +89,7 @@ const StatsTable = ({ stats, me, hideChange = false, currentActive }: Props) => 
                 )}
                 <td className="position-column">{index + 1}</td>
                 <td className="name-column">
-                  <Link href={`/users/${stat.user.cid}`}>
-                    <a>{nick}</a>
-                  </Link>
+                  <Link href={`/users/${stat.user.cid}`}>{nick}</Link>
                 </td>
                 <td>{convertSecondsToString(stat.durationSeconds)}</td>
               </tr>
