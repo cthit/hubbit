@@ -1,5 +1,5 @@
 import { createClient as createWSClient } from 'graphql-ws';
-import { createClient as createUrqlClient, defaultExchanges, subscriptionExchange } from 'urql';
+import { cacheExchange, createClient as createUrqlClient, fetchExchange, subscriptionExchange } from 'urql';
 
 export const clientSideClient = () => {
   // Default to secure websockets, and only downgrade if page is unsecure too
@@ -16,12 +16,14 @@ export const clientSideClient = () => {
   return createUrqlClient({
     url: '/api/graphql',
     exchanges: [
-      ...defaultExchanges,
+      cacheExchange,
+      fetchExchange,
       subscriptionExchange({
         forwardSubscription: operation => {
+          const input = { ...operation, query: operation.query || '' };
           return {
             subscribe: sink => ({
-              unsubscribe: wsClient.subscribe(operation, sink as any),
+              unsubscribe: wsClient.subscribe(input, sink as any),
             }),
           };
         },
@@ -36,6 +38,7 @@ export const serverSideClient = (headers?: Record<string, string>) => {
     fetchOptions: {
       headers,
     },
+    exchanges: [cacheExchange, fetchExchange],
   });
 };
 
