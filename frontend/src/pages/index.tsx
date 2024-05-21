@@ -95,7 +95,7 @@ const Home: NextPage<PageProps<CurrentSessionsQuery>> = ({ data }) => {
     if (sessions.length === 0) {
       return [
         {
-          user: { cid: 'rat', nick: 'Hubbenråttan', groups: [{ name: "ratIT", prettyName: "🐀" }]},
+          user: { cid: 'simongre', nick: 'Hubbenråttan', groups: [{ name: "ratIT", prettyName: "🐀" }]},
           startTime: new Date().toISOString(),
           id: 'rat',
         },
