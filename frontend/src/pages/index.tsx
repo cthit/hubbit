@@ -91,14 +91,27 @@ const Home: NextPage<PageProps<CurrentSessionsQuery>> = ({ data }) => {
     return <Error />;
   }
 
+  const addRatIfNoSessions = (sessions: CurrentSessionFragment[]) => {
+    if (sessions.length === 0) {
+      return [
+        {
+          user: { cid: 'rat', nick: 'Hubbenråttan', groups: [{ name: "ratIT", prettyName: "🐀" }]},
+          startTime: new Date().toISOString(),
+          id: 'rat',
+        },
+      ];
+    }
+    return sessions;
+  };
+
   return (
     <>
       <Head>
         <title>{createTitle('Who is in the Hubb?')}</title>
       </Head>
       <div className={styles.sessionsContainer}>
-        <ActiveUserList sessions={sessions} loggedInUser={data.me.cid} />
-        <ActiveGroupList sessions={sessions} />
+        <ActiveUserList sessions={addRatIfNoSessions(sessions)} loggedInUser={data.me.cid} />
+        <ActiveGroupList sessions={addRatIfNoSessions(sessions)} />
       </div>
     </>
   );

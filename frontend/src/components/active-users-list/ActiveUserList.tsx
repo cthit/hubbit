@@ -68,6 +68,7 @@ const ActiveUserList = ({ sessions, loggedInUser }: Props) => {
           <tbody>
             {sortedSessions.map(session => {
               const startTime = new Date(session.startTime);
+              console.log(session);
 
               return (
                 <tr
