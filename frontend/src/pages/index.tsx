@@ -100,7 +100,7 @@ const Home: NextPage<PageProps<CurrentSessionsQuery>> = ({ data }) => {
           id: 'rat',
         },
       ];
-    }
+    };
     return sessions;
   };
 
