@@ -24,10 +24,10 @@ export function dateDiffToString(dateDiff: DateDiff) {
   return dateDiff.daysSince > 0
     ? `${dateDiff.daysSince} day${dateDiff.daysSince > 1 ? 's' : ''}`
     : dateDiff.hoursSince > 0
-    ? `${dateDiff.hoursSince} hour${dateDiff.hoursSince > 1 ? 's' : ''}`
-    : dateDiff.minutesSince > 0
-    ? `${dateDiff.minutesSince} minute${dateDiff.minutesSince === 1 ? '' : 's'}`
-    : `${dateDiff.secondsSince} second${dateDiff.secondsSince === 1 ? '' : 's'}`;
+      ? `${dateDiff.hoursSince} hour${dateDiff.hoursSince > 1 ? 's' : ''}`
+      : dateDiff.minutesSince > 0
+        ? `${dateDiff.minutesSince} minute${dateDiff.minutesSince === 1 ? '' : 's'}`
+        : `${dateDiff.secondsSince} second${dateDiff.secondsSince === 1 ? '' : 's'}`;
 }
 
 export function isAfterNow(date: Date): boolean {

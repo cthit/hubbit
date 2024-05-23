@@ -1,8 +1,7 @@
 type ActiveSession {
-	user: User!
-	startTime: DateTime!
+  user: User!
+  startTime: DateTime!
 }
-
 
 """
 Implement the DateTime<Utc> scalar
@@ -12,126 +11,122 @@ The input/output is a string in RFC3339 format.
 scalar DateTime
 
 type Device {
-	id: UUID!
-	address: String!
-	name: String!
-	isActive: Boolean!
+  id: UUID!
+  address: String!
+  name: String!
+  isActive: Boolean!
 }
 
 input DeviceInput {
-	address: String!
-	name: String!
+  address: String!
+  name: String!
 }
-
 
 type Group {
-	name: String!
-	prettyName: String!
+  name: String!
+  prettyName: String!
 }
 
-
-
 type MutationRoot {
-	setDevices(data: SetDevicesInput!): [Device!]!
+  setDevices(data: SetDevicesInput!): [Device!]!
 }
 
 enum Period {
-	SUMMER
-	LP1
-	LP2
-	LP3
-	LP4
+  SUMMER
+  LP1
+  LP2
+  LP3
+  LP4
 }
 
 type QueryRoot {
-	currentSessions: [ActiveSession!]!
-	statsAlltime: [Stat!]!
-	statsStudyYear(input: StatsStudyYearInput): StatsStudyYearPayload!
-	statsStudyPeriod(input: StatsStudyPeriodInput): StatsStudyPeriodPayload!
-	statsMonth(input: StatsMonthInput): StatsMonthPayload!
-	statsWeek(input: StatsWeekInput): StatsWeekPayload!
-	statsDay(input: StatsDayInput): StatsDayPayload!
-	me: User!
-	user(input: UserUniqueInput!): User!
+  currentSessions: [ActiveSession!]!
+  statsAlltime: [Stat!]!
+  statsStudyYear(input: StatsStudyYearInput): StatsStudyYearPayload!
+  statsStudyPeriod(input: StatsStudyPeriodInput): StatsStudyPeriodPayload!
+  statsMonth(input: StatsMonthInput): StatsMonthPayload!
+  statsWeek(input: StatsWeekInput): StatsWeekPayload!
+  statsDay(input: StatsDayInput): StatsDayPayload!
+  me: User!
+  user(input: UserUniqueInput!): User!
 }
 
 type Session {
-	startTime: DateTime!
-	endTime: DateTime!
+  startTime: DateTime!
+  endTime: DateTime!
 }
 
 input SetDevicesInput {
-	devices: [DeviceInput!]!
+  devices: [DeviceInput!]!
 }
 
 type Stat {
-	user: User!
-	durationSeconds: Int!
-	currentPosition: Int!
-	prevPosition: Int
+  user: User!
+  durationSeconds: Int!
+  currentPosition: Int!
+  prevPosition: Int
 }
 
 input StatsDayInput {
-	year: Int!
-	month: Int!
-	day: Int!
+  year: Int!
+  month: Int!
+  day: Int!
 }
 
 type StatsDayPayload {
-	stats: [Stat!]!
-	curr: YearMonthDay!
-	next: YearMonthDay!
-	prev: YearMonthDay!
+  stats: [Stat!]!
+  curr: YearMonthDay!
+  next: YearMonthDay!
+  prev: YearMonthDay!
 }
 
 input StatsMonthInput {
-	year: Int!
-	month: Int!
+  year: Int!
+  month: Int!
 }
 
 type StatsMonthPayload {
-	stats: [Stat!]!
-	curr: YearMonth!
-	next: YearMonth!
-	prev: YearMonth!
+  stats: [Stat!]!
+  curr: YearMonth!
+  next: YearMonth!
+  prev: YearMonth!
 }
 
 input StatsStudyPeriodInput {
-	year: Int!
-	period: Period!
+  year: Int!
+  period: Period!
 }
 
 type StatsStudyPeriodPayload {
-	stats: [Stat!]!
-	year: Int!
-	period: Period!
+  stats: [Stat!]!
+  year: Int!
+  period: Period!
 }
 
 input StatsStudyYearInput {
-	year: Int!
+  year: Int!
 }
 
 type StatsStudyYearPayload {
-	stats: [Stat!]!
-	year: Int!
+  stats: [Stat!]!
+  year: Int!
 }
 
 input StatsWeekInput {
-	year: Int!
-	week: Int!
+  year: Int!
+  week: Int!
 }
 
 type StatsWeekPayload {
-	stats: [Stat!]!
-	curr: YearWeek!
-	next: YearWeek!
-	prev: YearWeek!
+  stats: [Stat!]!
+  curr: YearWeek!
+  next: YearWeek!
+  prev: YearWeek!
 }
 
-
 type SubscriptionRoot {
-	userJoin: ActiveSession!
-	userLeave: User!
+  userJoin: ActiveSession!
+  userLeave: User!
 }
 
 """
@@ -147,48 +142,47 @@ entities without requiring a central allocating authority.
 scalar UUID
 
 type User {
-	id: UUID!
-	cid: String!
-	nick: String!
-	firstName: String!
-	lastName: String!
-	avatarUrl: String!
-	groups: [Group!]!
-	hourStats: [Int!]!
-	recentSessions: [Session!]!
-	longestSession: Session
-	totalTimeSeconds: Int!
-	averageTimePerDay: Int!
-	timeTodaySeconds: Int!
-	devices: [Device!]!
-	currAlltimePosition: Int
-	currStudyYearPosition: Int
+  id: UUID!
+  cid: String!
+  nick: String!
+  firstName: String!
+  lastName: String!
+  avatarUrl: String!
+  groups: [Group!]!
+  hourStats: [Int!]!
+  recentSessions: [Session!]!
+  longestSession: Session
+  totalTimeSeconds: Int!
+  averageTimePerDay: Int!
+  timeTodaySeconds: Int!
+  devices: [Device!]!
+  currAlltimePosition: Int
+  currStudyYearPosition: Int
 }
 
 input UserUniqueInput {
-	id: UUID
-	cid: String
+  id: UUID
+  cid: String
 }
 
 type YearMonth {
-	year: Int!
-	month: Int!
+  year: Int!
+  month: Int!
 }
 
 type YearMonthDay {
-	year: Int!
-	month: Int!
-	day: Int!
+  year: Int!
+  month: Int!
+  day: Int!
 }
 
 type YearWeek {
-	year: Int!
-	week: Int!
+  year: Int!
+  week: Int!
 }
 
 schema {
-	query: QueryRoot
-	mutation: MutationRoot
-	subscription: SubscriptionRoot
+  query: QueryRoot
+  mutation: MutationRoot
+  subscription: SubscriptionRoot
 }
-

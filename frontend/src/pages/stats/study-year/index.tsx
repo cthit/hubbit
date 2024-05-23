@@ -4,6 +4,7 @@ import { gql } from '@urql/core';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { AnyVariables } from 'urql';
 
 import { StatsStudyYearQuery } from '../../../__generated__/graphql';
 import Error from '../../../components/error/Error';
@@ -92,4 +93,7 @@ function getInputProps(context: GetServerSidePropsContext) {
   };
 }
 
-export const getServerSideProps = defaultGetServerSideProps<StatsStudyYearQuery>(STATS_STUDY_YEAR_QUERY, getInputProps);
+export const getServerSideProps = defaultGetServerSideProps<StatsStudyYearQuery, AnyVariables>(
+  STATS_STUDY_YEAR_QUERY,
+  getInputProps,
+);

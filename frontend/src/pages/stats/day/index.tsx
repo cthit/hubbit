@@ -4,6 +4,7 @@ import { gql } from '@urql/core';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { AnyVariables } from 'urql';
 
 import { StatsDayQuery } from '../../../__generated__/graphql';
 import Error from '../../../components/error/Error';
@@ -87,7 +88,7 @@ const StatsDay: NextPage<PageProps<StatsDayQuery>> = ({ data }) => {
 
 export default StatsDay;
 
-function getInputProps(context: GetServerSidePropsContext) {
+function getInputProps(context: GetServerSidePropsContext): AnyVariables {
   let year = NaN;
   const yearString = context.query['year'];
   if (yearString) {
@@ -119,4 +120,7 @@ function getInputProps(context: GetServerSidePropsContext) {
   };
 }
 
-export const getServerSideProps = defaultGetServerSideProps<StatsDayQuery>(STATS_DAY_QUERY, getInputProps);
+export const getServerSideProps = defaultGetServerSideProps<StatsDayQuery, AnyVariables>(
+  STATS_DAY_QUERY,
+  getInputProps,
+);
