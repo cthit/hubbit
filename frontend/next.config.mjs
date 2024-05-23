@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:ep*',
-        destination: `${process.env.BACKEND_ADDRESS}/api/:ep*`,
+        destination: `${process.env.BACKEND_ADDRESS ?? ''}/api/:ep*`,
       },
     ];
   },

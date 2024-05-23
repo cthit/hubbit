@@ -3,7 +3,7 @@ tr#hookit {
 
   th {
     color: #282828;
-    font-family: "Rye";
+    font-family: 'Rye';
     font-size: 1em;
   }
 }
@@ -45,7 +45,11 @@ tr#snit {
   th {
     color: white;
     font-size: 1em;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    text-shadow:
+      -1px 0 black,
+      0 1px black,
+      1px 0 black,
+      0 -1px black;
   }
 }
 
@@ -86,7 +90,11 @@ tr#styrit {
 
   th {
     color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    text-shadow:
+      -1px 0 black,
+      0 1px black,
+      1px 0 black,
+      0 -1px black;
   }
 }
 
@@ -128,7 +136,7 @@ tr#talperson {
 
   th {
     color: white;
-    text-align: right
+    text-align: right;
   }
 }
 
@@ -137,7 +145,7 @@ tr#\38 bit {
 
   th {
     color: white;
-    font-family: "Silkscreen";
+    font-family: 'Silkscreen';
     font-size: 1em;
   }
 }
@@ -150,7 +158,6 @@ tr#kandidatmiddagen {
 tr#kandidatmiddagen th {
   opacity: 0;
 }
-
 
 tr#flashit {
   background: url('/group-images/flashit.png');

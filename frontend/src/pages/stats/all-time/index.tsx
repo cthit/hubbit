@@ -3,6 +3,7 @@ import React from 'react';
 import { gql } from '@urql/core';
 import { NextPage } from 'next';
 import Head from 'next/head';
+import { AnyVariables } from 'urql';
 
 import { StatsAlltimeQuery } from '../../../__generated__/graphql';
 import Error from '../../../components/error/Error';
@@ -52,4 +53,4 @@ const AllTime: NextPage<PageProps<StatsAlltimeQuery>> = ({ data }) => {
 
 export default AllTime;
 
-export const getServerSideProps = defaultGetServerSideProps<StatsAlltimeQuery>(STATS_ALL_TIME_QUERY);
+export const getServerSideProps = defaultGetServerSideProps<StatsAlltimeQuery, AnyVariables>(STATS_ALL_TIME_QUERY);

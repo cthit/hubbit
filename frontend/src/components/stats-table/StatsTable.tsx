@@ -12,6 +12,7 @@ import {
 import { formatNick } from '../../util';
 
 import styles from './StatsTable.module.scss';
+import Image from 'next/image';
 
 interface Props {
   stats: StatsTableStatFragment[];
@@ -79,7 +80,7 @@ const StatsTable = ({ stats, me, hideChange = false, currentActive }: Props) => 
                 />
                 {!hideChange && (
                   <td>
-                    <img
+                    <Image
                       title={getChangeTitle(stat.currentPosition, stat.prevPosition)}
                       src={getChangeImageName(stat.currentPosition, stat.prevPosition)}
                       alt="position change icon"

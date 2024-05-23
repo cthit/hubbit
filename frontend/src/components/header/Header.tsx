@@ -21,9 +21,9 @@ const Header = () => {
   return (
     <header className={styles.hContainer}>
       <h1>
-        <a className={styles.title} href="/">
+        <Link className={styles.title} href="/">
           Who is in the Hubb?
-        </a>
+        </Link>
       </h1>
       <nav>
         <ul className={styles.menu}>

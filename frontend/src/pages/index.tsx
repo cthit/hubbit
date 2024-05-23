@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { gql } from '@urql/core';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useSubscription } from 'urql';
+import { AnyVariables, useSubscription } from 'urql';
 
 import {
   CurrentSessionFragment,
@@ -104,6 +104,6 @@ const Home: NextPage<PageProps<CurrentSessionsQuery>> = ({ data }) => {
   );
 };
 
-export const getServerSideProps = defaultGetServerSideProps<CurrentSessionsQuery>(CURRENT_SESSIONS_QUERY);
+export const getServerSideProps = defaultGetServerSideProps<CurrentSessionsQuery, AnyVariables>(CURRENT_SESSIONS_QUERY);
 
 export default Home;

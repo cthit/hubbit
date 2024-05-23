@@ -3,6 +3,7 @@ import React from 'react';
 import { gql } from '@urql/core';
 import { NextPage } from 'next';
 import Head from 'next/head';
+import { AnyVariables } from 'urql';
 
 import { MeQuery } from '../../__generated__/graphql';
 import DeviceList, { DEVICE_FRAGMENT } from '../../components/device-list/DeviceList';
@@ -45,4 +46,4 @@ const Index: NextPage<PageProps<MeQuery>> = ({ data }) => {
 
 export default Index;
 
-export const getServerSideProps = defaultGetServerSideProps<MeQuery>(ME_QUERY);
+export const getServerSideProps = defaultGetServerSideProps<MeQuery, AnyVariables>(ME_QUERY);

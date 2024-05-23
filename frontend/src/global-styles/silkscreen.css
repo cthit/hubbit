@@ -1,8 +1,9 @@
 /* silkscreen - used for 8bit font */
 @font-face {
-    font-family: 'Silkscreen';
-    font-style: normal;
-    /* font-weight: 300; */
-    src: local(''),
+  font-family: 'Silkscreen';
+  font-style: normal;
+  /* font-weight: 300; */
+  src:
+    local(''),
     url('/fonts/slkscr.ttf') format('truetype'); /* Safari, Android, iOS */
 }

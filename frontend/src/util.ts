@@ -55,8 +55,7 @@ export interface PageProps<T> {
 
 export const defaultGetServerSideProps = <
   Result,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  Variables extends AnyVariables = undefined,
+  Variables extends AnyVariables,
   Params extends ParsedUrlQuery = ParsedUrlQuery,
 >(
   query: DocumentNode,
@@ -77,7 +76,6 @@ export const defaultGetServerSideProps = <
     }
     const variables: Variables = ((inputCallback && inputCallback(context)) || undefined) as Variables;
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
     const { data, error } = await client.query<Result, Variables>(query, variables).toPromise();
 
     let redirect: Redirect | undefined = undefined;
