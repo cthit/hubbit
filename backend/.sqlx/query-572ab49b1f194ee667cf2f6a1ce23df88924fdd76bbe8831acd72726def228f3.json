@@ -1,0 +1,59 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\nSELECT *\nFROM study_periods\nWHERE year = $1 AND period = $2\n      ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "year",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 2,
+        "name": "period",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "start_date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 4,
+        "name": "end_date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 6,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "572ab49b1f194ee667cf2f6a1ce23df88924fdd76bbe8831acd72726def228f3"
+}
