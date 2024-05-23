@@ -35,11 +35,11 @@ RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
 WORKDIR /app
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/server.js /app/package.json /app/yarn.lock ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/package.json /app/yarn.lock ./
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/public ./public
 COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/next.config.js  ./
+COPY --from=BUILD_IMAGE --chown=nextjs:nodejs /app/next.config.mjs  ./
 
 USER nextjs
 

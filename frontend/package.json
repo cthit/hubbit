@@ -26,7 +26,7 @@
     "prettier:check": "yarn generate-gql-types && prettier --list-different --ignore-pattern .gitignore \"**/*.{ts,tsx,js,jsx,json,yml,yaml}\"",
     "prettier:fix": "yarn generate-gql-types && prettier --write --loglevel error --ignore-pattern .gitignore \"**/*.{ts,tsx,js,jsx,json,yml,yaml}\"",
     "generate-gql-schema": "cd ../backend && cargo run --bin export_sdl > ../frontend/schema.gql",
-    "start": "node server.js",
+    "start": "next start",
     "test": "yarn generate-gql-types && jest -c ./.jestrc.json \".*\\.test\\.(ts|js)\" --passWithNoTests"
   },
   "dependencies": {
