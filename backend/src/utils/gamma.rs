@@ -20,6 +20,7 @@ struct GammaTokenRequest {
 pub async fn oauth2_token(config: &Config, code: &str) -> HubbitResult<GammaTokenResponse> {
   let client = Client::new();
 
+  // TODO: THis should be a config param
   let redirect_uri = "http://localhost:3000/api/auth/gamma/callback";
 
   let url = format!("{}/oauth2/token", config.gamma_internal_url);
