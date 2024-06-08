@@ -57,8 +57,11 @@ async fn gamma_init_flow(
     }
   }
 
+  let scope = "openid%20profile";
+  let redirect_uri = "http://localhost:3000/api/auth/gamma/callback";
+
   let url = format!(
-    "{}/api/oauth/authorize?response_type=code&client_id={}&state={}",
+    "{}/oauth2/authorize?response_type=code&client_id={}&state={}&scope={scope}&redirect_uri={redirect_uri}",
     config.gamma_public_url, config.gamma_client_id, state
   );
   HttpResponse::TemporaryRedirect()
@@ -92,8 +95,8 @@ async fn gamma_callback(
 
   let token_response = match crate::utils::gamma::oauth2_token(&config, &query.code).await {
     Ok(token_response) => token_response,
-    Err(_) => {
-      error!("[Gamma auth] Could not get gamma access token");
+    Err(err) => {
+      error!("[Gamma auth] Could not get gamma access token, err {err:?}");
       return HttpResponse::BadRequest().finish();
     }
   };

@@ -97,10 +97,9 @@ async fn main() -> HubbitResult<()> {
       App::new()
         .wrap(middleware::Logger::default())
         .wrap(
-          // CookieSession::private(cookie_secret.as_bytes()).secure(cookie_secure)
           SessionMiddleware::builder(CookieSessionStore::default(), cookie_secret.clone())
             .cookie_http_only(true)
-            .cookie_same_site(SameSite::Strict)
+            .cookie_same_site(SameSite::Lax)
             .cookie_secure(cookie_secure)
             .build(),
         )
