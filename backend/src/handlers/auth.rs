@@ -57,6 +57,7 @@ async fn gamma_init_flow(
     }
   }
 
+  // TODO: these should be config params
   let scope = "openid%20profile";
   let redirect_uri = "http://localhost:3000/api/auth/gamma/callback";
 
