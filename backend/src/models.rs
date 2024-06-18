@@ -99,29 +99,55 @@ impl From<Period> for i32 {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GammaUser {
+  #[serde(rename = "sub")]
   pub id: Uuid,
   pub cid: String,
+  #[serde(rename = "nickname")]
   pub nick: String,
-  #[serde(rename = "firstName")]
+  #[serde(rename = "given_name")]
   pub first_name: String,
-  #[serde(rename = "lastName")]
+  #[serde(rename = "family_name")]
   pub last_name: String,
-  #[serde(rename = "avatarUrl")]
+  #[serde(rename = "picture")]
   pub avatar_url: String,
-  pub groups: Vec<GammaGroup>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GammaGroup {
-  pub active: bool,
-  #[serde(rename = "superGroup")]
+  pub id: Uuid,
+  pub name: String,
+  pub pretty_name: String,
   pub super_group: GammaSuperGroup,
+  pub post: GammaGroupPost,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GammaSuperGroup {
   pub id: Uuid,
   pub name: String,
-  #[serde(rename = "prettyName")]
   pub pretty_name: String,
+  #[serde(rename = "type")]
+  pub group_type: GammaGroupType,
+  pub sv_description: String,
+  pub en_description: String,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename = "camelCase")]
+pub enum GammaGroupType {
+  Society,
+  Functionaries,
+  Committee,
+  Alumni,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GammaGroupPost {
+  pub id: Uuid,
+  pub version: u32,
+  pub sv_name: String,
+  pub en_name: String,
 }

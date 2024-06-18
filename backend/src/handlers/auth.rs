@@ -57,13 +57,11 @@ async fn gamma_init_flow(
     }
   }
 
-  // TODO: these should be config params
   let scope = "openid%20profile";
-  let redirect_uri = "http://localhost:3000/api/auth/gamma/callback";
 
   let url = format!(
-    "{}/oauth2/authorize?response_type=code&client_id={}&state={}&scope={scope}&redirect_uri={redirect_uri}",
-    config.gamma_public_url, config.gamma_client_id, state
+    "{}/oauth2/authorize?response_type=code&client_id={}&state={}&scope={scope}&redirect_uri={}",
+    config.gamma_public_url, config.gamma_client_id, state, config.gamma_redirect_uri
   );
   HttpResponse::TemporaryRedirect()
     .append_header(("Location", url))

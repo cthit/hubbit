@@ -20,13 +20,19 @@ services:
       PORT: 8080
       DATABASE_URL: postgres://hubbit:hubbit@hubbit-db/hubbit
       REDIS_URL: redis://hubbit-redis:6379
-      GAMMA_PUBLIC_URL: http://localhost:8081
-      GAMMA_INTERNAL_URL: http://gamma-backend:3000
-      GAMMA_API_KEY: hubbit
-      GAMMA_CLIENT_ID: hubbit
-      GAMMA_CLIENT_SECRET: hubbit
-      COOKIE_SECRET: QkAbEaSuT5UNDthgnScWhQwET7HzHUzFPhrS62xwYUwvtbx2ihmQanSSML2Ky63r
-      COOKIE_SECURE: "false"
+      # GAMMA_PUBLIC_URL: http://localhost:8081
+      GAMMA_PUBLIC_URL: https://auth.chalmers.it
+      # GAMMA_INTERNAL_URL: http://gamma-backend:3000
+      GAMMA_INTERNAL_URL: https://auth.chalmers.it
+      # GAMMA_API_KEY: hubbit
+      # GAMMA_CLIENT_ID: hubbit
+      # GAMMA_CLIENT_SECRET: hubbit
+      GAMMA_API_KEY: INSERT_FIELD_HERE 
+      GAMMA_CLIENT_ID: INSERT_FIELD_HERE
+      GAMMA_CLIENT_SECRET: INSERT_FIELD_HERE 
+      GAMMA_REDIRECT_URI: http://localhost:3000/api/auth/gamma/callback
+      COOKIE_SECRET: vVQvsmpCkHLuleJthaEd5KhCC23mnW3W5RGSNGQOru6Y32VBrddDJEMNSXGXiKeqWhTEOAQRlfYtYjbuLMY1N2PuDbOaMzx7UPpt6Ejnm2Rq4C3Wwew8wlLbMHOt14SQ
+      COOKIE_SECURE: true
       RUST_LOG: ${BACKEND_LOG_LEVEL}
       GROUP_WHITELIST: ${GROUP_WHITELIST}
     ports:
@@ -64,45 +70,45 @@ services:
     volumes:
       - /settings
 
-  gamma-frontend:
-    image: cthit/gamma-frontend:development
-    environment:
-      HTTP_PROXY: http://gamma-backend:3000
-    ports:
-      - ${LOCAL_GAMMA_FRONTEND_PORT}:3000
+  # gamma-frontend:
+  #   image: cthit/gamma-frontend:development
+  #   environment:
+  #     HTTP_PROXY: http://gamma-backend:3000
+  #   ports:
+  #     - ${LOCAL_GAMMA_FRONTEND_PORT}:3000
 
-  gamma-backend:
-    image: cthit/gamma-backend
-    environment:
-      # Default admin user name = admin
-      # Default admin password  = password
+  # gamma-backend:
+  #   image: cthit/gamma-backend
+  #   environment:
+  #     # Default admin user name = admin
+  #     # Default admin password  = password
 
-      DB_USER: gamma
-      DB_PASSWORD: gamma
-      DB_HOST: gamma-db
-      DB_PORT: 5432
-      DB_NAME: gamma
+  #     DB_USER: gamma
+  #     DB_PASSWORD: gamma
+  #     DB_HOST: gamma-db
+  #     DB_PORT: 5432
+  #     DB_NAME: gamma
 
-      REDIS_HOST: gamma-redis
-      REDIS_PASSWORD: ""
-      REDIS_PORT: 6379
+  #     REDIS_HOST: gamma-redis
+  #     REDIS_PASSWORD: ""
+  #     REDIS_PORT: 6379
 
-      SERVER_PORT: 3000
-      SUCCESSFUL_LOGIN: http://localhost:${LOCAL_GAMMA_FRONTEND_PORT}
-      CORS_ALLOWED_ORIGIN: http://localhost:${LOCAL_GAMMA_FRONTEND_PORT}
-      BACKEND_URI: http://localhost:${LOCAL_GAMMA_BACKEND_PORT}/api/
-      PRODUCTION: "false"
-      COOKIE_DOMAIN: localhost
-      IS_MOCKING: "true"
-    ports:
-      - ${LOCAL_GAMMA_BACKEND_PORT}:3000
+  #     SERVER_PORT: 3000
+  #     SUCCESSFUL_LOGIN: http://localhost:${LOCAL_GAMMA_FRONTEND_PORT}
+  #     CORS_ALLOWED_ORIGIN: http://localhost:${LOCAL_GAMMA_FRONTEND_PORT}
+  #     BACKEND_URI: http://localhost:${LOCAL_GAMMA_BACKEND_PORT}/api/
+  #     PRODUCTION: "false"
+  #     COOKIE_DOMAIN: localhost
+  #     IS_MOCKING: "true"
+  #   ports:
+  #     - ${LOCAL_GAMMA_BACKEND_PORT}:3000
 
-  gamma-redis:
-    image: redis:5.0
+  # gamma-redis:
+  #   image: redis:5.0
 
-  gamma-db:
-    image: postgres:10
-    environment:
-      POSTGRES_USER: gamma
-      POSTGRES_DB: gamma
-      POSTGRES_PASSWORD: gamma
+  # gamma-db:
+  #   image: postgres:10
+  #   environment:
+  #     POSTGRES_USER: gamma
+  #     POSTGRES_DB: gamma
+  #     POSTGRES_PASSWORD: gamma
