@@ -10,6 +10,7 @@ pub struct Config {
   pub gamma_api_key: String,
   pub gamma_client_id: String,
   pub gamma_client_secret: String,
+  pub gamma_redirect_uri: String,
   pub cookie_secret: String,
   pub cookie_secure: bool,
   pub group_whitelist: Vec<String>,
@@ -26,6 +27,7 @@ impl Config {
       gamma_api_key: try_read_var("GAMMA_API_KEY")?,
       gamma_client_id: try_read_var("GAMMA_CLIENT_ID")?,
       gamma_client_secret: try_read_var("GAMMA_CLIENT_SECRET")?,
+      gamma_redirect_uri: try_read_var("GAMMA_REIDRECT_URI")?,
       cookie_secret: try_read_var("COOKIE_SECRET")?,
       cookie_secure: try_read_var("COOKIE_SECURE")?,
       group_whitelist: try_read_var::<String>("GROUP_WHITELIST")
