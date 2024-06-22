@@ -6,8 +6,9 @@ use actix_web::{
 };
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse, GraphQLSubscription};
+use gamma_rust_client::oauth::GammaAccessToken;
 
-use crate::{config::Config, schema::HubbitSchema};
+use crate::{config::Config, models::AuthorizedUser, schema::HubbitSchema};
 
 async fn playground() -> Result<HttpResponse, Error> {
   Ok(
@@ -26,9 +27,9 @@ async fn graphql(
   config: web::Data<Config>,
 ) -> GraphQLResponse {
   let mut request = gql_request.into_inner();
-  if let Ok(Some(access_token)) = session.get::<String>("gamma_access_token") {
-    if let Ok(user) = crate::utils::gamma::get_current_user(&config, &access_token).await {
-      request = request.data(user);
+  if let Ok(Some(access_token)) = session.get::<GammaAccessToken>("gamma_access_token") {
+    if let Ok(user) = access_token.get_current_user(&config.gamma_config).await {
+      request = request.data(AuthorizedUser::from(user));
     }
   };
 
@@ -43,8 +44,9 @@ async fn graphql_ws(
   payload: web::Payload,
 ) -> Result<HttpResponse> {
   let mut authenticated = false;
-  if let Ok(Some(access_token)) = session.get::<String>("gamma_access_token") {
-    if crate::utils::gamma::get_current_user(&config, &access_token)
+  if let Ok(Some(access_token)) = session.get::<GammaAccessToken>("gamma_access_token") {
+    if access_token
+      .get_current_user(&config.gamma_config)
       .await
       .is_ok()
     {

@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{
-  models::{GammaUser, UserSession},
+  models::{AuthorizedUser, GammaGroupType, GammaUser, UserSession},
   repositories::{device::DeviceRepository, user_session::UserSessionRepository},
   services::{hour_stats::HourStatsService, user::UserService},
   utils::{MAX_DATETIME, MIN_DATETIME},
@@ -69,6 +69,7 @@ impl User {
   }
 
   async fn cid(&self, context: &Context<'_>) -> HubbitSchemaResult<String> {
+    log::info!("Retrieving CID for user {}", self.id);
     let user_service = context.data_unchecked::<UserService>();
     let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
       error!("[Schema error] {:?}", e);
@@ -104,15 +105,6 @@ impl User {
     Ok(user.last_name)
   }
 
-  async fn avatar_url(&self, context: &Context<'_>) -> HubbitSchemaResult<String> {
-    let user_service = context.data_unchecked::<UserService>();
-    let user = user_service.get_by_id(self.id, false).await.map_err(|e| {
-      error!("[Schema error] {:?}", e);
-      HubbitSchemaError::InternalError
-    })?;
-    Ok(user.avatar_url)
-  }
-
   async fn groups(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Group>> {
     let user_service = context.data_unchecked::<UserService>();
     let config = context.data_unchecked::<Config>();
@@ -120,11 +112,12 @@ impl User {
       error!("[Schema error] {:?}", e);
       HubbitSchemaError::InternalError
     })?;
+
     let mut groups = user
       .groups
       .into_iter()
       .filter(|group| {
-        group.active
+        group.super_group.group_type != GammaGroupType::Alumni
           && (config.group_whitelist.is_empty()
             || config.group_whitelist.contains(&group.super_group.name))
       })
@@ -151,7 +144,7 @@ impl User {
   }
 
   async fn recent_sessions(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Session>> {
-    let user = context.data_unchecked::<GammaUser>();
+    let user = context.data_unchecked::<AuthorizedUser>();
     let user_session_repo = context.data_unchecked::<UserSessionRepository>();
 
     let sessions = user_session_repo
@@ -161,7 +154,7 @@ impl User {
         error!("[Schema error] {:?}", e);
         HubbitSchemaError::InternalError
       })?;
-    let sessions_limit = if user.id == self.id { 10 } else { 1 };
+    let sessions_limit = if user.user_id == self.id { 10 } else { 1 };
     Ok(
       sessions
         .iter()
@@ -291,10 +284,11 @@ impl User {
   }
 
   pub async fn devices(&self, context: &Context<'_>) -> HubbitSchemaResult<Vec<Device>> {
-    let auth_user = context
-      .data::<GammaUser>()
-      .map_err(|_| HubbitSchemaError::NotLoggedIn)?;
-    if self.id != auth_user.id {
+    let auth_user = context.data::<AuthorizedUser>().map_err(|err| {
+      error!("Failed to retrieve current user for devices, err: {err:?}");
+      HubbitSchemaError::NotLoggedIn
+    })?;
+    if self.id != auth_user.user_id {
       return Err(HubbitSchemaError::NotAuthorized);
     }
 

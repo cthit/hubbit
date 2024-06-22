@@ -99,17 +99,41 @@ impl From<Period> for i32 {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GammaUser {
-  #[serde(rename = "sub")]
   pub id: Uuid,
   pub cid: String,
-  #[serde(rename = "nickname")]
   pub nick: String,
-  #[serde(rename = "given_name")]
   pub first_name: String,
-  #[serde(rename = "family_name")]
   pub last_name: String,
-  #[serde(rename = "picture")]
-  pub avatar_url: String,
+  pub groups: Vec<GammaGroup>,
+}
+
+impl GammaUser {
+  pub fn from_user_and_groups(
+    user: gamma_rust_client::api::GammaUser,
+    groups: Vec<gamma_rust_client::api::GammaUserGroup>,
+  ) -> Self {
+    Self {
+      id: user.id,
+      cid: user.cid,
+      nick: user.nick,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      groups: groups.into_iter().map(|g| g.into()).collect(),
+    }
+  }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AuthorizedUser {
+  pub user_id: Uuid,
+}
+
+impl From<gamma_rust_client::oauth::GammaOpenIDUser> for AuthorizedUser {
+  fn from(value: gamma_rust_client::oauth::GammaOpenIDUser) -> Self {
+    Self {
+      user_id: value.user_id,
+    }
+  }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -120,6 +144,18 @@ pub struct GammaGroup {
   pub pretty_name: String,
   pub super_group: GammaSuperGroup,
   pub post: GammaGroupPost,
+}
+
+impl From<gamma_rust_client::api::GammaUserGroup> for GammaGroup {
+  fn from(value: gamma_rust_client::api::GammaUserGroup) -> Self {
+    Self {
+      id: value.id,
+      name: value.name,
+      pretty_name: value.pretty_name,
+      super_group: value.super_group.into(),
+      post: value.post.into(),
+    }
+  }
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -134,20 +170,58 @@ pub struct GammaSuperGroup {
   pub en_description: String,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+impl From<gamma_rust_client::api::GammaSuperGroup> for GammaSuperGroup {
+  fn from(value: gamma_rust_client::api::GammaSuperGroup) -> Self {
+    Self {
+      id: value.id,
+      name: value.name,
+      pretty_name: value.pretty_name,
+      group_type: value.group_type.into(),
+      sv_description: value.sv_description,
+      en_description: value.en_description,
+    }
+  }
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[serde(rename = "camelCase")]
 pub enum GammaGroupType {
   Society,
   Functionaries,
   Committee,
   Alumni,
+  Other(String),
+}
+
+impl From<gamma_rust_client::api::GammaSuperGroupType> for GammaGroupType {
+  fn from(value: gamma_rust_client::api::GammaSuperGroupType) -> Self {
+    match value {
+      gamma_rust_client::api::GammaSuperGroupType::Alumni => Self::Alumni,
+      gamma_rust_client::api::GammaSuperGroupType::Committee => Self::Committee,
+      gamma_rust_client::api::GammaSuperGroupType::Society => Self::Society,
+      gamma_rust_client::api::GammaSuperGroupType::Functionaries => Self::Functionaries,
+      gamma_rust_client::api::GammaSuperGroupType::Admin => Self::Other("Admin".into()),
+      gamma_rust_client::api::GammaSuperGroupType::Other(v) => Self::Other(v),
+    }
+  }
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GammaGroupPost {
   pub id: Uuid,
-  pub version: u32,
+  pub version: i32,
   pub sv_name: String,
   pub en_name: String,
+}
+
+impl From<gamma_rust_client::api::GammaPost> for GammaGroupPost {
+  fn from(value: gamma_rust_client::api::GammaPost) -> Self {
+    Self {
+      id: value.id,
+      version: value.version,
+      sv_name: value.sv_name,
+      en_name: value.en_name,
+    }
+  }
 }

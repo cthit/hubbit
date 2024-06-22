@@ -3,7 +3,7 @@ use log::error;
 use uuid::Uuid;
 
 use crate::{
-  models::GammaUser,
+  models::{AuthorizedUser, GammaUser},
   repositories::{
     device::{CreateDevice, DeviceRepository, UpdateDevice},
     session::SessionRepository,
@@ -76,11 +76,14 @@ impl DeviceMutation {
     }
 
     let device_repo = context.data_unchecked::<DeviceRepository>();
-    let auth_user = context.data_unchecked::<GammaUser>();
-    let current_devices = device_repo.get_for_user(auth_user.id).await.map_err(|e| {
-      error!("[Schema error] {:?}", e);
-      HubbitSchemaError::InternalError
-    })?;
+    let auth_user = context.data_unchecked::<AuthorizedUser>();
+    let current_devices = device_repo
+      .get_for_user(auth_user.user_id)
+      .await
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?;
 
     let mut devices_to_create = Vec::new();
     let mut devices_to_update = Vec::new();
@@ -130,7 +133,7 @@ impl DeviceMutation {
         .create(CreateDevice {
           address: device.address,
           name: device.name,
-          user_id: auth_user.id,
+          user_id: auth_user.user_id,
         })
         .await
         .map_err(|e| {
@@ -139,10 +142,13 @@ impl DeviceMutation {
         })?;
     }
 
-    let current_devices = device_repo.get_for_user(auth_user.id).await.map_err(|e| {
-      error!("[Schema error] {:?}", e);
-      HubbitSchemaError::InternalError
-    })?;
+    let current_devices = device_repo
+      .get_for_user(auth_user.user_id)
+      .await
+      .map_err(|e| {
+        error!("[Schema error] {:?}", e);
+        HubbitSchemaError::InternalError
+      })?;
 
     Ok(
       current_devices
