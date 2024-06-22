@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{
-  models::{AuthorizedUser, GammaGroupType, GammaUser, UserSession},
+  models::{AuthorizedUser, GammaGroupType, UserSession},
   repositories::{device::DeviceRepository, user_session::UserSessionRepository},
   services::{hour_stats::HourStatsService, user::UserService},
   utils::{MAX_DATETIME, MIN_DATETIME},

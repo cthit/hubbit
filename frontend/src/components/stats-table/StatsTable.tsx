@@ -10,8 +10,7 @@ import {
   StatsTableStatFragment,
 } from '../../__generated__/graphql';
 import { formatNick } from '../../util';
-
-import styles from './StatsTable.module.scss';
+import styles from "./StatsTable.module.scss";
 import Image from 'next/image';
 
 interface Props {
@@ -85,6 +84,8 @@ const StatsTable = ({ stats, me, hideChange = false, currentActive }: Props) => 
                       src={getChangeImageName(stat.currentPosition, stat.prevPosition)}
                       alt="position change icon"
                       className={styles.changeIcon}
+                      width={16}
+                      height={16}
                     />
                   </td>
                 )}

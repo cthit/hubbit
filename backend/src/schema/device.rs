@@ -3,7 +3,7 @@ use log::error;
 use uuid::Uuid;
 
 use crate::{
-  models::{AuthorizedUser, GammaUser},
+  models::AuthorizedUser,
   repositories::{
     device::{CreateDevice, DeviceRepository, UpdateDevice},
     session::SessionRepository,
