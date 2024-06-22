@@ -42,8 +42,7 @@ impl UserRepository {
       .get_users()
       .await?
       .into_iter()
-      .filter(|user| user.cid.as_str() == cid)
-      .next()
+      .find(|user| user.cid.as_str() == cid)
       .ok_or(HubbitError::NotFound)?;
 
     let groups = self.gamma_client.get_groups_for_user(&user.id).await?;

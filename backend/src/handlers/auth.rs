@@ -100,7 +100,7 @@ async fn gamma_callback(
     }
   };
 
-  if let Err(_) = session.insert("gamma_access_token", token) {
+  if session.insert("gamma_access_token", token).is_err() {
     error!("[Gamma auth] Could not set gamma_acess_token key in cookie");
     return HttpResponse::InternalServerError().finish();
   }
