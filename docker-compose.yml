@@ -23,7 +23,7 @@ services:
       GAMMA_API_KEY: hubbit
       GAMMA_CLIENT_ID: hubbit
       GAMMA_CLIENT_SECRET: hubbit
-      GAMMA_URL: auth.chalmers.it
+      GAMMA_URL: https://auth.chalmers.it
       GAMMA_REDIRECT_URI: http://localhost:3000/api/auth/gamma/callback
       COOKIE_SECRET: vVQvsmpCkHLuleJthaEd5KhCC23mnW3W5RGSNGQOru6Y32VBrddDJEMNSXGXiKeqWhTEOAQRlfYtYjbuLMY1N2PuDbOaMzx7UPpt6Ejnm2Rq4C3Wwew8wlLbMHOt14SQ
       COOKIE_SECURE: true
