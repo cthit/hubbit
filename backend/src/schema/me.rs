@@ -1,6 +1,6 @@
 use async_graphql::{Context, Object};
 
-use crate::models::GammaUser;
+use crate::models::AuthorizedUser;
 
 use super::{user::User, AuthGuard};
 
@@ -11,7 +11,7 @@ pub struct MeQuery;
 impl MeQuery {
   #[graphql(guard = AuthGuard)]
   pub async fn me(&self, context: &Context<'_>) -> User {
-    let user = context.data_unchecked::<GammaUser>();
-    User { id: user.id }
+    let user = context.data_unchecked::<AuthorizedUser>();
+    User { id: user.user_id }
   }
 }

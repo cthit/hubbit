@@ -10,7 +10,7 @@ use async_graphql::{Context, ErrorExtensions, Guard, MergedObject, Result, Schem
 use futures::StreamExt;
 
 use crate::{
-  broker::SimpleBroker, event::UserEvent, models::GammaUser,
+  broker::SimpleBroker, event::UserEvent, models::AuthorizedUser,
   repositories::user_session::UserSessionRepository,
 };
 
@@ -108,7 +108,7 @@ pub struct AuthGuard;
 
 impl Guard for AuthGuard {
   async fn check(&self, context: &Context<'_>) -> Result<()> {
-    if context.data_opt::<GammaUser>().is_some() {
+    if context.data_opt::<AuthorizedUser>().is_some() {
       Ok(())
     } else {
       Err(HubbitSchemaError::NotLoggedIn.extend())

@@ -1,4 +1,5 @@
 use actix_web::ResponseError;
+use gamma_rust_client::error::GammaError;
 
 #[derive(Debug, thiserror::Error)]
 pub enum HubbitError {
@@ -16,6 +17,8 @@ pub enum HubbitError {
   SqlxError(#[from] sqlx::Error),
   #[error("Io error")]
   IoError(#[from] std::io::Error),
+  #[error("Gamma error")]
+  GammaError(#[from] GammaError),
   #[error("Entity not found")]
   NotFound,
 }

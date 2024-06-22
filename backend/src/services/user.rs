@@ -65,16 +65,16 @@ impl UserService {
         self.store_user_in_cache(user_entry.user.clone()).await;
         let redis_pool = self.redis_pool.clone();
         let user_repo = self.user_repo.clone();
-        tokio::spawn(async move {
-          Self::fetch_and_store_user_redis(user_repo, redis_pool, id.to_string()).await
-        });
+        tokio::spawn(
+          async move { Self::fetch_and_store_user_redis(user_repo, redis_pool, &id).await },
+        );
 
         return Ok(user_entry.user);
       }
     }
 
     // If in neither local cache or redis, fetch the user
-    self.fetch_and_store_user(id.to_string()).await
+    self.fetch_and_store_user(&id).await
   }
 
   pub async fn get_by_cid(&self, cid: String) -> HubbitResult<GammaUser> {
@@ -82,7 +82,10 @@ impl UserService {
     if let Ok(id) = redis_get::<Uuid>(self.redis_pool.clone(), &key).await {
       self.get_by_id(id, false).await
     } else {
-      self.fetch_and_store_user(cid).await
+      log::info!(
+        "Retrieving user by cid ('{cid}'), this is quite expensive and should be avoided if possible"
+      );
+      self.fetch_and_store_user_by_cid(cid).await
     }
   }
 
@@ -121,7 +124,7 @@ impl UserService {
             let redis_pool = self.redis_pool.clone();
             let user_repo = self.user_repo.clone();
             tokio::spawn(async move {
-              Self::fetch_and_store_user_redis(user_repo, redis_pool, id.to_string()).await
+              Self::fetch_and_store_user_redis(user_repo, redis_pool, &id).await
             });
           }
         } else {
@@ -136,7 +139,7 @@ impl UserService {
         let user_repo = self.user_repo.clone();
         let redis_pool = self.redis_pool.clone();
         async move {
-          match user_repo.get(id.to_string()).await {
+          match user_repo.get(id).await {
             Ok(user) => {
               let user_entry = UserEntry {
                 user: user.clone(),
@@ -163,9 +166,22 @@ impl UserService {
     Ok(users)
   }
 
-  async fn fetch_and_store_user(&self, id: String) -> HubbitResult<GammaUser> {
+  async fn fetch_and_store_user(&self, id: &Uuid) -> HubbitResult<GammaUser> {
+    log::info!("Fetching user from auth service, id: {id:?}");
     let user =
       Self::fetch_and_store_user_redis(self.user_repo.clone(), self.redis_pool.clone(), id).await?;
+    self.store_user_in_cache(user.clone()).await;
+    Ok(user)
+  }
+
+  async fn fetch_and_store_user_by_cid(&self, cid: String) -> HubbitResult<GammaUser> {
+    log::info!("Fetching user from auth service by cid: {cid:?}");
+    let user = Self::fetch_and_store_user_by_cid_redis(
+      self.user_repo.clone(),
+      self.redis_pool.clone(),
+      cid.as_str(),
+    )
+    .await?;
     self.store_user_in_cache(user.clone()).await;
     Ok(user)
   }
@@ -173,9 +189,23 @@ impl UserService {
   async fn fetch_and_store_user_redis(
     user_repo: UserRepository,
     redis_pool: RedisPool,
-    id: String,
+    id: &Uuid,
   ) -> HubbitResult<GammaUser> {
     let user = user_repo.get(id).await?;
+    let user_entry = UserEntry {
+      user: user.clone(),
+      updated_at: Local::now(),
+    };
+    tokio::spawn(async move { Self::store_user_redis(redis_pool, user_entry).await });
+    Ok(user)
+  }
+
+  async fn fetch_and_store_user_by_cid_redis(
+    user_repo: UserRepository,
+    redis_pool: RedisPool,
+    cid: &str,
+  ) -> HubbitResult<GammaUser> {
+    let user = user_repo.get_by_cid(cid).await?;
     let user_entry = UserEntry {
       user: user.clone(),
       updated_at: Local::now(),

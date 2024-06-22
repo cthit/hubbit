@@ -3,8 +3,8 @@ use actix_web::{
   web::{self, ServiceConfig},
   HttpResponse,
 };
+use gamma_rust_client::oauth::{GammaAccessToken, GammaState};
 use log::{error, warn};
-use rand::{distributions::Alphanumeric, thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 
 use crate::config::Config;
@@ -19,11 +19,12 @@ async fn gamma_init_flow(
   session: Session,
   query: web::Query<GammaInitFlowQuery>,
 ) -> HttpResponse {
-  if let Ok(Some(access_token)) = session.get::<String>("gamma_access_token") {
-    if crate::utils::gamma::get_current_user(&config, &access_token)
-      .await
-      .is_ok()
-    {
+  if let Ok(Some(access_token)) = session.get::<GammaAccessToken>("gamma_access_token") {
+    if let Err(err) = access_token.get_current_user(&config.gamma_config).await {
+      warn!("[Gamma auth flow] Failed to get current user with the access token, err: {err:?}");
+      session.remove("gamma_access_token");
+    } else {
+      // The user is already authenticated.
       let url = query.from.clone().unwrap_or_else(|| "/".to_string());
       return HttpResponse::TemporaryRedirect()
         .append_header(("Location", url))
@@ -31,12 +32,15 @@ async fn gamma_init_flow(
     }
   };
 
-  let state: String = thread_rng()
-    .sample_iter(&Alphanumeric)
-    .take(32)
-    .map(char::from)
-    .collect();
-  match session.insert("gamma_state", &state) {
+  let gamma_init = match gamma_rust_client::oauth::gamma_init_auth(&config.gamma_config) {
+    Ok(init) => init,
+    Err(err) => {
+      error!("[Gamma auth] Could not setup gamma auth initialization, err: {err:?}");
+      return HttpResponse::InternalServerError().finish();
+    }
+  };
+
+  match session.insert("gamma_state", gamma_init.state) {
     Ok(_) => {}
     Err(_) => {
       error!("[Gamma auth] Could not set gamma_state key in cookie");
@@ -57,14 +61,8 @@ async fn gamma_init_flow(
     }
   }
 
-  let scope = "openid%20profile";
-
-  let url = format!(
-    "{}/oauth2/authorize?response_type=code&client_id={}&state={}&scope={scope}&redirect_uri={}",
-    config.gamma_public_url, config.gamma_client_id, state, config.gamma_redirect_uri
-  );
   HttpResponse::TemporaryRedirect()
-    .append_header(("Location", url))
+    .append_header(("Location", gamma_init.redirect_to))
     .finish()
 }
 
@@ -79,7 +77,7 @@ async fn gamma_callback(
   session: Session,
   query: web::Query<GammaTokenQuery>,
 ) -> HttpResponse {
-  let saved_state = match session.get::<String>("gamma_state") {
+  let saved_state = match session.get::<GammaState>("gamma_state") {
     Ok(Some(saved_state)) => saved_state,
     _ => {
       warn!("[Gamma auth] Could not retrieve gamma_state");
@@ -87,25 +85,24 @@ async fn gamma_callback(
     }
   };
 
-  if query.state != saved_state {
-    warn!("[Gamma auth] State mismatch");
-    return HttpResponse::BadRequest().finish();
-  }
-
-  let token_response = match crate::utils::gamma::oauth2_token(&config, &query.code).await {
-    Ok(token_response) => token_response,
+  let token = match saved_state
+    .gamma_callback_params(
+      &config.gamma_config,
+      query.state.clone(),
+      query.code.clone(),
+    )
+    .await
+  {
+    Ok(t) => t,
     Err(err) => {
-      error!("[Gamma auth] Could not get gamma access token, err {err:?}");
+      error!("[Gamma auth] Failed to exchange code for auth token, err: {err:?}");
       return HttpResponse::BadRequest().finish();
     }
   };
 
-  match session.insert("gamma_access_token", token_response.access_token) {
-    Ok(_) => {}
-    Err(_) => {
-      error!("[Gamma auth] Could not set gamma_acess_token key in cookie");
-      return HttpResponse::InternalServerError().finish();
-    }
+  if let Err(_) = session.insert("gamma_access_token", token) {
+    error!("[Gamma auth] Could not set gamma_acess_token key in cookie");
+    return HttpResponse::InternalServerError().finish();
   }
 
   let from = match session.get::<String>("gamma_from") {

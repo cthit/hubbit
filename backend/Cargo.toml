@@ -43,3 +43,4 @@ tokio = { version = "1.36.0", features = [
     "time",
 ] }
 uuid = { version = "1.7.0", features = ["serde"] }
+gamma_rust_client = { git = "https://github.com/viddem/gamma.git", rev = "1235842562c9f3b50a68582dea13f66fbe93cf5e" }
