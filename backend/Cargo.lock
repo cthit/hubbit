@@ -1304,7 +1304,7 @@ dependencies = [
 [[package]]
 name = "gamma_rust_client"
 version = "0.1.0"
-source = "git+https://github.com/viddem/gamma.git?rev=1235842562c9f3b50a68582dea13f66fbe93cf5e#1235842562c9f3b50a68582dea13f66fbe93cf5e"
+source = "git+https://github.com/cthit/gamma.git?rev=5b832d0ddc91d68aa4db1d35a40bd57251b51f39#5b832d0ddc91d68aa4db1d35a40bd57251b51f39"
 dependencies = [
  "rand",
  "reqwest 0.12.5",
