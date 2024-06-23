@@ -39,7 +39,7 @@ services:
     command: ["./wait-for-postgres.sh", "hubbit-db", "${PG_PASSWORD}", "${PG_USERNAME}", "sh", "-c", "cargo sqlx migrate run && cargo watch -x run"]
 
   hubbit-db:
-    image: postgres:16
+    image: postgres:13.2
     environment:
       POSTGRES_DB: ${PG_DATABASE}
       POSTGRES_USER: ${PG_USERNAME}
