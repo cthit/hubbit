@@ -82,9 +82,6 @@ impl UserService {
     if let Ok(id) = redis_get::<Uuid>(self.redis_pool.clone(), &key).await {
       self.get_by_id(id, false).await
     } else {
-      log::info!(
-        "Retrieving user by cid ('{cid}'), this is quite expensive and should be avoided if possible"
-      );
       self.fetch_and_store_user_by_cid(cid).await
     }
   }
