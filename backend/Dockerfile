@@ -57,5 +57,6 @@ EXPOSE 8080
 
 COPY migrations ./
 COPY --from=build /app/target/x86_64-unknown-linux-musl/release/server ./hubbit
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 CMD ["./hubbit"]
