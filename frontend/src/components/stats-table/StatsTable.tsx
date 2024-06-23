@@ -10,7 +10,7 @@ import {
   StatsTableStatFragment,
 } from '../../__generated__/graphql';
 import { formatNick } from '../../util';
-import styles from "./StatsTable.module.scss";
+import styles from './StatsTable.module.scss';
 import Image from 'next/image';
 
 interface Props {
