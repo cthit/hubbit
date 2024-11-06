@@ -73,19 +73,16 @@ async fn update_sessions(
   user_session_repo
     .update_sessions(&user_ids)
     .await
-    .map_err(|e| {
-      warn!("[Update sessions] Could not update user sessions");
-      e
-    })?;
+    .inspect_err(|_e| warn!("[Update sessions] Could not update user sessions"))?;
 
   let devices = devices
     .into_iter()
     .map(|device| (device.user_id, device.address))
     .collect::<Vec<_>>();
-  session_repo.update_sessions(&devices).await.map_err(|e| {
-    warn!("[Update sessions] Could not update sessions");
-    e
-  })?;
+  session_repo
+    .update_sessions(&devices)
+    .await
+    .inspect_err(|_e| warn!("[Update sessions] Could not update sessions"))?;
 
   Ok(HttpResponse::Ok().finish())
 }
