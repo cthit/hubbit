@@ -44,4 +44,4 @@ tokio = { version = "1.36.0", features = [
     "time",
 ] }
 uuid = { version = "1.7.0", features = ["serde"] }
-gamma_rust_client = { git = "https://github.com/cthit/gamma.git", rev = "5b832d0ddc91d68aa4db1d35a40bd57251b51f39" }
+gamma_rust_client = { git = "https://github.com/cthit/gamma.git", rev = "ee36d346f17fe580152b04be0c55621a76c54808" }
