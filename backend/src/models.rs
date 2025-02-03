@@ -210,7 +210,6 @@ impl From<gamma_rust_client::api::GammaSuperGroupType> for GammaGroupType {
 #[serde(rename_all = "camelCase")]
 pub struct GammaGroupPost {
   pub id: Uuid,
-  pub version: i32,
   pub sv_name: String,
   pub en_name: String,
 }
@@ -219,7 +218,6 @@ impl From<gamma_rust_client::api::GammaPost> for GammaGroupPost {
   fn from(value: gamma_rust_client::api::GammaPost) -> Self {
     Self {
       id: value.id,
-      version: value.version,
       sv_name: value.sv_name,
       en_name: value.en_name,
     }
