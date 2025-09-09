@@ -10,7 +10,7 @@ RUN apt update && apt install -y tzdata
 WORKDIR /app
 
 # Install required tools
-RUN cargo install sqlx-cli
+RUN cargo install sqlx-cli@0.7.3
 
 # Install build-target for static linking
 RUN rustup target add x86_64-unknown-linux-musl
