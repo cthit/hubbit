@@ -1,7 +1,7 @@
 ##################
 ### BASE STAGE ###
 ##################
-FROM rust:1.82 as base
+FROM rust:1.89 as base
 
 ENV TZ=Europe/Stockholm
 ENV DEBIAN_FRONTEND=noninteractive
